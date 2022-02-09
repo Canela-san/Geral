@@ -1,0 +1,11 @@
+------- ComandosPWSH -------
+
+#Sugerir comandos no terminal em forma de ListView
+Set-PSReadLineOption -PredictionViewStyle ListView
+
+#Scan da imagem do windows
+SFC /SCANNOW
+
+#Coreção de irregularidas no windows
+DISM.exe /Online /Cleanup-image /Restorehealth
+awdawdawd:
