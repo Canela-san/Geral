@@ -8,3 +8,6 @@ SFC /SCANNOW
 
 #Coreção de irregularidas no windows
 DISM.exe /Online /Cleanup-image /Restorehealth
+
+#Desfragmentar disco
+defrag C: -W -F
