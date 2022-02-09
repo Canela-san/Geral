@@ -4,6 +4,17 @@ cls
 echo.
 echo.
 echo.
+echo - - - - Desfragmentação do Disco C: - - - -
+echo.
+echo processando...
+echo.
+defrag C: -W -F
+echo.
+echo Desfragmentação concluida!
+timeout /t 5 /nobreak
+echo.
+echo.
+echo.
 echo - - - - Verificação de integridade do windows - - - -
 echo.
 echo.
