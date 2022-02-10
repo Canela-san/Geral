@@ -5,14 +5,16 @@ echo.
 echo ------ Atualizando Repositorio Github ------
 echo.
 echo.
-echo -> git add .
+echo - git add .
 echo.
 git add .
 echo.
-echo -> git commit -m "Sem descrição"
+echo - git commit -m "Sem descrição"
+echo.
 git commit -m "Sem descrição"
 echo.
-echo -> git push -u origin main
+echo - git push -u origin main
+echo.
 git push -u origin main
 echo.
-
+pause
