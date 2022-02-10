@@ -1,4 +1,18 @@
+@echo off
 cls
+echo.
+echo.
+echo ------ Atualizando Repositorio Github ------
+echo.
+echo.
+echo -> git add .
+echo.
 git add .
+echo.
+echo -> git commit -m "Sem descrição"
 git commit -m "Sem descrição"
+echo.
+echo -> git push -u origin main
 git push -u origin main
+echo.
+
