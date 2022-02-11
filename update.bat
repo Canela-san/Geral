@@ -1,5 +1,12 @@
 @echo off
 cls
+echo ------- Atualizando a pasta .config -------
+echo.
+$SourcePath = 'C:\Users\Canela\.config'
+$DestinationPath = 'C:\Users\Canela\Geral\.config'
+robocopy $SourcePath $DestinationPath /E
+echo.
+echo Atualizado com sucesso
 echo.
 echo.
 echo ------ Atualizando Repositorio Github ------

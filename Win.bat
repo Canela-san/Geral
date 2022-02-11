@@ -1,19 +1,25 @@
-@echo off
 chcp 65001
 
 :Menu
 cls
 echo.
 echo.
-echo --------------- MENU ---------------
+echo ---------------------- MENU ----------------------
 echo /
+echo / 0 - Sair
 echo / 1 - All
+echo / 2 - Desfragmentar
+echo / 3 - Corrigir integridade da imagem do windows
+echo / 4 - Corrigir integridade dos arquivos do Windows
 echo /
-echo ------------------------------------
+echo --------------------------------------------------
 echo.
 set /p "menu=>"
-IF %menu%==0 goto Menu
+IF %menu%==0 exit
 IF %menu%==1 goto Defrag
+IF %menu%==2 goto Defrag
+IF %menu%==3 goto Integridade1
+IF %menu%==4 goto Integridade2
 goto menu
 
 :Defrag
@@ -29,6 +35,8 @@ defrag C: -W -F
 echo.
 echo Desfragmentação concluida!
 timeout /t 5 /nobreak
+IF %menu%==1 goto Integridade1
+IF %menu%==2 goto Reiniciar
 
 :Integridade1
 cls
@@ -45,6 +53,8 @@ echo .............
 echo.
 echo (Passo 1) - finalizado
 timeout /t 5 /nobreak
+IF %menu%==1 goto Integridade2
+IF %menu%==3 goto Reiniciar
 
 :Integridade2
 cls
@@ -58,6 +68,8 @@ echo .............
 echo.
 echo (Passo 2) - finalizado
 timeout /t 5 /nobreak
+IF %menu%==1 goto Reiniciar
+IF %menu%==4 goto Reiniciar
 
 :Reiniciar
 cls
