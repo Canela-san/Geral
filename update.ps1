@@ -1,4 +1,3 @@
-@echo off
 cls
 echo ------- Atualizando a pasta .config -------
 echo.
