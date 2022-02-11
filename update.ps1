@@ -1,26 +1,19 @@
 cls
-echo ------- Atualizando a pasta .config -------
-echo.
+write-host "------- Atualizando a pasta .config ------- `n"
 $SourcePath = 'C:\Users\Canela\.config'
 $DestinationPath = 'C:\Users\Canela\Geral\.config'
 robocopy $SourcePath $DestinationPath /E
-echo.
-echo Atualizado com sucesso
-echo.
-echo.
-echo ------ Atualizando Repositorio Github ------
-echo.
-echo.
-echo - git add .
-echo.
+write-host "`n Atualizado com sucesso `n`n"
+write-host " ------ Atualizando Repositorio Github ------ `n`n"
+write-host " - git add . `n"
 git add .
-echo.
-echo - git commit -m "Sem descrição"
-echo.
+write-host ""
+write-host " - git commit -m 'Sem descrição' "
+write-host ""
 git commit -m "Sem descrição"
-echo.
-echo - git push -u origin main
-echo.
+write-host ""
+write-host " - git push -u origin main "
+write-host ""
 git push -u origin main
-echo.
+write-host ""
 pause
