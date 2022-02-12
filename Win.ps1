@@ -31,46 +31,49 @@ while($Temp_menu)
 	}
 }
 
-#Sair (0)
-if($menu -eq 0)
-{
-	exit
-}
+Switch ($menu){
 
-#Desfragmentação (1, 2)
-if ($menu -in $defrag)
-{
-	cls
-	write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
-	write-host " processando...`n"
-	defrag C: -W -F
-	write-host "`n Desfragmentação concluida!"
-	timeout /t 5 /nobreak
-}
+	#Sair (0)
+	0 
+	{ 
+		exit 
+	}
 
-#Integridade1
-if ($menu -in $integridade1)
-{
-	cls
-	write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
-	write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
-	write-host " processando..."
-	DISM.exe /Online /Cleanup-image /Restorehealth
-	write-host " .............`n"
-	write-host " (Passo 1) - finalizado"
-	timeout /t 5 /nobreak
-}
+	#Desfragmentação (1, 2)
+	{$PSItem -in $defrag}
+	{
+		cls
+		write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
+		write-host " processando...`n"
+		defrag C: -W -F
+		write-host "`n Desfragmentação concluida!"
+		timeout /t 5 /nobreak
+	}
 
-#Integridade2
-if ($menu -in $integridade2)
-{
-	cls
-	write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
-	write-host " processando..."
-	SFC /SCANNOW
-	write-host " .............`n"
-	write-host " (Passo 2) - finalizado"
-	timeout /t 5 /nobreak
+	#Integridade1
+	{$PSItem -in $integridade1}
+	{
+		cls
+		write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
+		write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
+		write-host " processando..."
+		DISM.exe /Online /Cleanup-image /Restorehealth
+		write-host " .............`n"
+		write-host " (Passo 1) - finalizado"
+		timeout /t 5 /nobreak
+	}
+
+	#Integridade2
+	{$PSItem -in $integridade2}
+	{
+		cls
+		write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
+		write-host " processando..."
+		SFC /SCANNOW
+		write-host " .............`n"
+		write-host " (Passo 2) - finalizado"
+		timeout /t 5 /nobreak
+	}
 }
 
 #Reiniciar

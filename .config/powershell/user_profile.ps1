@@ -27,7 +27,7 @@ Set-Alias -Name vim -Value nvim
 Set-Alias ll ls
 Set-Alias g git
 Set-Alias grep findstr
-Set-Alias win 'C:\Users\Canela\Geral\Win.bat'
+Set-Alias win 'C:\Users\Canela\Geral\Win.ps1'
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
 
