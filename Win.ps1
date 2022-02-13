@@ -23,22 +23,34 @@ while($Temp_menu)
 
 	$menu = Read-Host -Prompt '-> '
 	
-	if ($menu -in $quant_menu)
+	#Sair
+	if ($menu -eq 0)
 	{
-		$Temp_menu = $false
-	} else {
-		$Temp_menu = $true
+		Exit
+	}
+	else 
+	{
+		if ($menu -in $quant_menu)
+        	{
+                	$Temp_menu = $false
+			write-host "`nDeseja reiniciar o computador no final da execução? (Y) ou (N)"
+                	$R_temp = Read-Host -Prompt '-> '
+                	if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
+                	{
+                       		$reiniciar = $true
+                	}
+                	elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
+                	{
+                        	$reiniciar = $false
+                	}
+        	} else {
+                	$Temp_menu = $true
+        	}
 	}
 }
 
 Switch ($menu){
-
-	#Sair (0)
-	0 
-	{ 
-		exit 
-	}
-
+	
 	#Desfragmentação (1, 2)
 	{$PSItem -in $defrag}
 	{
@@ -80,8 +92,7 @@ Switch ($menu){
 if ($Reiniciar)
 {
 	cls
-	write-host "`n`n`n O computador será reiniciado em 5 minutos, saia caso não queira reiniciar."
-	timeout /t 300 /nobreak
-	write-host " Shutdown -r -f -t 0 (não exucutado de proprósito)"
-	timeout /t -1
+	write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
+	timeout /t 15 /nobreak
+	Shutdown -r -f -t 0 (não exucutado de proprósito)
 }
