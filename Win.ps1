@@ -94,5 +94,5 @@ if ($Reiniciar)
 	cls
 	write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
 	timeout /t 15 /nobreak
-	Shutdown -r -f -t 0 (não exucutado de proprósito)
+	Shutdown -r -f -t 0
 }
