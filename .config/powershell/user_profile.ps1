@@ -31,6 +31,7 @@ Set-Alias win 'C:\Users\Canela\Geral\win.ps1'
 Set-Alias update 'C:\Users\Canela\Geral\update.ps1'
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
+Set-Alias defender 'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.2201.10-0\MpCmdRun.exe'
 
 # Utilities
 function which ($command) {

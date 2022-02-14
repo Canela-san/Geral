@@ -1,22 +1,27 @@
 chcp 65001
 
-#Menu
+#Declarando Variáveis
 $Temp_menu = $true
 $quant_menu = 0..4
 $defrag = 1,2
 $integridade1 = 1,3
 $integridade2 = 1,4
 $reiniciar = $true
+$date     = Get-Date
+
+#Menu
 while($Temp_menu)
 {
 	cls
+	write-host $date
 	write-host "`n`n ---------------------- MENU ----------------------"
-	write-host " /"
+	write-host " /                               "
 	write-host " / 0 - Sair"
-	write-host " / 1 - All"
+	write-host " / 1 - All [2,3,4]"
 	write-host " / 2 - Desfragmentar"
 	write-host " / 3 - Corrigir integridade da imagem do windows"
 	write-host " / 4 - Corrigir integridade dos arquivos do Windows"
+	write-host " / 5 - Verificação de vírus (em manutenção)"
 	write-host " /"
 	write-host " --------------------------------------------------`n"
 
@@ -28,7 +33,7 @@ while($Temp_menu)
 	{
 		Exit
 	}
-	else 
+	elseif (!($menu -eq ""))
 	{
 		if ($menu -in $quant_menu)
         	{

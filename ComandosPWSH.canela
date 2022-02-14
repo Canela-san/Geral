@@ -12,3 +12,18 @@ DISM.exe /Online /Cleanup-image /Restorehealth
 #Desfragmentar disco
 defrag C: -W -F
 
+#Windows defender scantype 1 (rapida), 2 (completa)
+MpCmdRun.exe -Scan -ScanType 2
+
+#Listar serviços
+Tasklist
+
+#IP externo
+curl ifconfig.co
+curl ifconfig.me
+curl icanhazip.com
+
+#
+$date     = Get-Date
+$computer = [System.Environment]::MachineName
+$username = ([Security.Principal.WindowsIdentity]::GetCurrent()).Name
