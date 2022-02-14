@@ -6,7 +6,7 @@ $quant_menu = 0..5
 $defrag = 1,2
 $integridade1 = 1,3
 $integridade2 = 1,4
-$WindowsDefender = 5
+$WindowsDefender = 1,5
 $reiniciar = $true
 $date = Get-Date
 
@@ -34,7 +34,7 @@ while($Temp_menu)
 	{
 		Exit
 	}
-	if ($menu -eq 5)
+	if ($menu -in $WindowsDefender)
     {
     	$Temp_menu_defender = $true
 		while($Temp_menu_defender)
