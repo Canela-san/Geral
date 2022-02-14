@@ -66,7 +66,7 @@ while($Temp_menu)
 		while($Temp_menu_defender)
 		{
 			Clear-Host
-			write-host "`n`nQue tipo de verificação você deseja?"
+			write-host "`n`nQue tipo de verificação contra vírus você deseja?"
 			write-host " [1] Verificação Rápida"
 			write-host " [2] Verificação Completa`n"
 			write-host " [0] Cancelar"

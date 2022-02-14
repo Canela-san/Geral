@@ -27,3 +27,12 @@ curl icanhazip.com
 $date     = Get-Date
 $computer = [System.Environment]::MachineName
 $username = ([Security.Principal.WindowsIdentity]::GetCurrent()).Name
+
+#Verificar se há SSD
+get-disk | ? model -match ‘ssd’
+
+
+
+
+
+
