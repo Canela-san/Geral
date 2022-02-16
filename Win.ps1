@@ -69,9 +69,10 @@ while($Temp_menu)
 			write-host "`n`nQue tipo de verificação contra vírus você deseja?"
 			write-host " [1] Verificação Rápida"
 			write-host " [2] Verificação Completa`n"
+			write-host " [3] Não verificar"
 			write-host " [0] Cancelar"
             		$TypeDefender = Read-Host -Prompt '-> '
-            		if ($TypeDefender -in 1,2)
+            		if ($TypeDefender -in 1,2,3)
         		{
 				$Temp_menu_defender = $false
 			}
@@ -158,15 +159,17 @@ Switch ($menu){
 	#WindowsDefender
 	{$PSItem -in $WindowsDefender}
 	{
-		Clear-Host
-		$CurrentPath = pwd
-		Set-Location "C:\Program Files\Windows Defender"
-		Get-ChildItem
-		Clear-Host
-		write-host "`nScan Type: "$TypeDefender"`n"
-		.\mpcmdrun.exe -SignatureUpdate
-		.\mpcmdrun.exe -Scan -ScanType $TypeDefender
-		Set-Location $CurrentPath
+		if (!($TypeDefender -eq 3)){
+			Clear-Host
+			$CurrentPath = pwd
+			Set-Location "C:\Program Files\Windows Defender"
+			Get-ChildItem
+			Clear-Host
+			write-host "`nScan Type: "$TypeDefender"`n"
+			.\mpcmdrun.exe -SignatureUpdate
+			.\mpcmdrun.exe -Scan -ScanType $TypeDefender
+			Set-Location $CurrentPath
+		}
 	}
 }
 
