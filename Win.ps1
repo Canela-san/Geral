@@ -2,11 +2,12 @@ chcp 65001
 
 #Declarando Variáveis
 $Temp_menu = $true
-$quant_menu = 0..5
+$quant_menu = 0..6
 $defrag = 1,2
 $integridade1 = 1,3
 $integridade2 = 1,4
 $WindowsDefender = 1,5
+$chkdsk = 6
 $reiniciar = $true
 $date = Get-Date
 
@@ -17,12 +18,13 @@ while($Temp_menu)
 	write-host $date
 	write-host "`n`n ---------------------- MENU ----------------------"
 	write-host " "
-	write-host "  [0] - Sair"
+	write-host "  [0] - Sair`n"
 	write-host "  [1] - All (2,3,4,5)"
 	write-host "  [2] - Desfragmentar"
 	write-host "  [3] - Corrigir integridade da imagem do windows"
 	write-host "  [4] - Corrigir integridade dos arquivos do Windows"
 	write-host "  [5] - Verificação de vírus (em manutenção)"
+	write-host "  [6] - Verificar e corrigir defeitos de disco"
 	write-host " "
 	write-host " --------------------------------------------------`n"
 
@@ -35,7 +37,7 @@ while($Temp_menu)
 		Exit
 	}
 
-	if ($menu -in $defrag)
+	if (($menu -in $defrag) -or ($menu -in $chkdsk))
 	{
 		$temp_menu_defrag = $true
 		while($temp_menu_defrag)
@@ -138,6 +140,8 @@ Switch ($menu){
 		write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
 		write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
 		write-host " processando..."
+		DISM /Online /Cleanup-Image /CheckHealth
+		DISM /Online /Cleanup-Image /ScanHealth
 		DISM.exe /Online /Cleanup-image /Restorehealth
 		write-host " .............`n"
 		write-host " (Passo 1) - finalizado"
@@ -169,6 +173,28 @@ Switch ($menu){
 			.\mpcmdrun.exe -SignatureUpdate
 			.\mpcmdrun.exe -Scan -ScanType $TypeDefender
 			Set-Location $CurrentPath
+		}
+	}
+
+	#chkdsk checagem de disco
+	{$PSItem -in $chkdsk}
+	{
+		if ($TypeDefrag -eq 1)
+		{
+			Clear-Host
+			write-host "`n`n---- Leia as instruções a baixo ----`n"
+			write-host "--A Checagem de disco é demorada e necessita reiniciar."
+			write-host "--O computador não poderá ser utilizado enquando a manutenção é realizada"
+			write-host "--O computador não pode ser desligado durante a manutenção"
+			write-host "--Caso seja desligado, o disco pode sofrer corrupções, e será necessário começar a verificação do zero"
+			write-host "--O tempo estimado é 4 horas a cada 500 GBs corrigidos."
+			write-host "--Caso deseje cancelar, Digite 'N' para a pergunta a seguir:`n`n"
+			chkdsk C: /f /r
+		}
+		else
+		{
+			clear-host
+			write-host "A checagem não será realizada em SSDs."
 		}
 	}
 }
