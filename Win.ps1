@@ -8,6 +8,7 @@ $integridade1 = 1,3
 $integridade2 = 1,4
 $WindowsDefender = 1,5
 $chkdsk = 6
+$Sysinfo = 7
 $reiniciar = $true
 $date = Get-Date
 
@@ -25,6 +26,7 @@ while($Temp_menu)
 	write-host "  [4] - Corrigir integridade dos arquivos do Windows"
 	write-host "  [5] - Verificação de vírus (em manutenção)"
 	write-host "  [6] - Verificar e corrigir defeitos de disco"
+	write-host "`n  [7] - Verificar informações do sistema"
 	write-host " "
 	write-host " --------------------------------------------------`n"
 
@@ -35,6 +37,12 @@ while($Temp_menu)
 	if ($menu -eq 0)
 	{
 		Exit
+	}
+	if ($menu -eq $Sysinfo)
+	{
+		Clear-Host
+		Systeminfo
+		timeout /t -1
 	}
 
 	if (($menu -in $defrag) -or ($menu -in $chkdsk))
