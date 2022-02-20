@@ -70,10 +70,12 @@ while($Temp_menu)
                 {
                         Clear-Host
                         write-host "`nAbrindo Abas Web:"
-			write-host "  - Nvidia GeForce Experience"
 			write-host "  - Drive Boost"
+			write-host "  - Chaves para Drive Boost"
+			write-host "  - Nvidia GeForce Experience"
+			Start-Process "https://www.iobit.com/pt/driver-booster.php"
+			Start-Process "https://www.gustavortech.com/2020/04/iobit-driver-booster.html"
 			Start-Process "https://www.nvidia.com/pt-br/geforce/geforce-experience/"
-                	Start-Process "https://www.iobit.com/pt/driver-booster.php"
 			timeout /t -1
                 }
 
