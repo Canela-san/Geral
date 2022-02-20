@@ -139,7 +139,7 @@ while($Temp_menu)
 			{
 				$Temp_menu = $false
 				Clear-Host
-				write-host "`n`nDeseja reiniciar o computador no final da execução? (Y) ou (N)"
+				write-host "`n`nDeseja reiniciar o computador no final da execução? (Y)Sim (N)não (D)Desligar"
 				$R_temp = Read-Host -Prompt '-> '
 				if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
 				{
@@ -148,6 +148,10 @@ while($Temp_menu)
 				elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
 				{
 					$reiniciar = $false
+				}
+				elseif (($R_temp -eq 'd') -or ($R_temp -eq 'D'))
+				{
+					$reiniciar = "Desligar"
 				}
 			}
 			else
@@ -244,13 +248,19 @@ while($Temp_menu)
 		}
 	}
 
-#Reiniciar
-if ($Reiniciar)
-{
-	Clear-Host
-	write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
-	timeout /t 15 /nobreak
-	Shutdown -r -f -t 0
-}
-
+	#Reiniciar
+	if ($Reiniciar -eq $true)
+	{
+		Clear-Host
+		write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
+		timeout /t 15 /nobreak
+		Shutdown -r -f -t 0
+	}
+	elseif ($Reiniciar -eq "Desligar")
+	{	      
+		Clear-Host
+	        write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
+        	timeout /t 15 /nobreak
+        	Shutdown -s -f -t 0
+	}
 }
