@@ -12,6 +12,18 @@ $Sysinfo = 7
 $reiniciar = $true
 $date = Get-Date
 
+#Testando Privilégios Administrativos
+if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match"S-1-5-32-544")))
+{
+	Clear-Host
+	Write-host "`n-----------------------------------------------------------------------------"
+	Write-Host "`n`nPrivilégios Insuficientes, execute como administrador"
+	Write-Host "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
+	Write-host "`n`n-----------------------------------------------------------------------------"
+	timeout /t -1
+	exit
+}
+
 #Menu
 while($Temp_menu)
 {
