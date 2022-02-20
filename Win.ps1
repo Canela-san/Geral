@@ -38,7 +38,7 @@ while($Temp_menu)
 	write-host "  [2] - Desfragmentar"
 	write-host "  [3] - Corrigir integridade da imagem do windows"
 	write-host "  [4] - Corrigir integridade dos arquivos do Windows"
-	write-host "  [5] - Verificação de vírus (em manutenção)"
+	write-host "  [5] - Verificação de vírus"
 	write-host ""
 	write-host "  [6] - Verificar e corrigir defeitos de disco"
 	write-host "  [7] - Adicionar Plano de Energia (Desempenho Maximo)"
