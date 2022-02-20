@@ -8,8 +8,10 @@ $integridade1 = 1,3
 $integridade2 = 1,4
 $WindowsDefender = 1,5
 $chkdsk = 6
-$Sysinfo = 7
-$reiniciar = $true
+$PlanoDeEnergia = 7
+$DrivesWeb = 8
+$Sysinfo = 9
+$reiniciar = $false
 $date = Get-Date
 
 #Testando Privilégios Administrativos
@@ -29,7 +31,7 @@ while($Temp_menu)
 {
 	Clear-Host
 	write-host $date
-	write-host "`n`n ---------------------- MENU ----------------------"
+	write-host "`n`n ------------------------ MENU ------------------------"
 	write-host " "
 	write-host "  [0] - Sair`n"
 	write-host "  [1] - All (2,3,4,5)"
@@ -37,187 +39,210 @@ while($Temp_menu)
 	write-host "  [3] - Corrigir integridade da imagem do windows"
 	write-host "  [4] - Corrigir integridade dos arquivos do Windows"
 	write-host "  [5] - Verificação de vírus (em manutenção)"
+	write-host ""
 	write-host "  [6] - Verificar e corrigir defeitos de disco"
-	write-host "`n  [7] - Verificar informações do sistema"
+	write-host "  [7] - Adicionar Plano de Energia (Desempenho Maximo)"
+	write-host "  [8] - Abrir páginas WEB para atualizar Drives"
+	write-host "  [9] - Verificar informações do sistema"
 	write-host " "
-	write-host " --------------------------------------------------`n"
+	write-host " ------------------------------------------------------`n"
 
 
 	$menu = Read-Host -Prompt '-> '
 	
-	#Sair
-	if ($menu -eq 0)
+	Switch ($menu)
 	{
-		Exit
-	}
-	if ($menu -eq $Sysinfo)
-	{
-		Clear-Host
-		Systeminfo
-		timeout /t -1
-	}
 
-	if (($menu -in $defrag) -or ($menu -in $chkdsk))
-	{
-		$temp_menu_defrag = $true
-		while($temp_menu_defrag)
+		0 #Sair
 		{
-			Clear-Host
-        		write-host "`n`nO diretório C: é um HD ou SSD?"
-			write-host " [1] HD (Hard Disk)"
-			write-host " [2] SSD`n"
-			write-host " [0] Cancelar"
-			
-			$TypeDefrag = Read-Host -Prompt '-> '
-                        
-			if ($TypeDefrag -in 1,2)
-                        {
-                                $Temp_menu_defrag = $false
-                        }
-                        elseif ($TypeDefrag -eq 0)
-                        {
-                                $menu = ""
-                                $Temp_menu_defrag = $false
-                        }
+			Exit
 		}
-	}
 
-	if ($menu -in $WindowsDefender)
-   	{
-    		$Temp_menu_defender = $true
-		while($Temp_menu_defender)
+		{$PSItem -eq $PlanoDeEnergia}
+                {
+                        Clear-Host
+			write-host "`n"
+                        powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+                        timeout /t -1
+                }
+
+		{$PSItem -eq $DrivesWeb}
+                {
+                        Clear-Host
+                        write-host "`nAbrindo Abas Web:"
+			write-host "  - Nvidia GeForce Experience"
+			write-host "  - Drive Boost"
+			Start-Process "https://www.nvidia.com/pt-br/geforce/geforce-experience/"
+                	Start-Process "https://www.iobit.com/pt/driver-booster.php"
+			timeout /t -1
+                }
+
+		{$PSItem -eq $Sysinfo}
 		{
 			Clear-Host
-			write-host "`n`nQue tipo de verificação contra vírus você deseja?"
-			write-host " [1] Verificação Rápida"
-			write-host " [2] Verificação Completa`n"
-			write-host " [3] Não verificar"
-			write-host " [0] Cancelar"
-            		$TypeDefender = Read-Host -Prompt '-> '
-            		if ($TypeDefender -in 1,2,3)
-        		{
-				$Temp_menu_defender = $false
-			}
-			elseif ($TypeDefender -eq 0)
+			Systeminfo
+			timeout /t -1
+		}
+
+		{($PSItem -in $defrag) -or ($PSItem -in $chkdsk)}
+		{
+			$temp_menu_defrag = $true
+			while($temp_menu_defrag)
 			{
-				$menu = ""
-				$Temp_menu_defender = $false
+				Clear-Host
+				write-host "`n`nO diretório C: é um HD ou SSD?"
+				write-host " [1] HD (Hard Disk)"
+				write-host " [2] SSD`n"
+				write-host " [0] Cancelar"
+				
+				$TypeDefrag = Read-Host -Prompt '-> '
+							
+				if ($TypeDefrag -in 1,2)
+					{
+						$Temp_menu_defrag = $false
+					}
+					elseif ($TypeDefrag -eq 0)
+					{
+						$PSItem = ""
+						$Temp_menu_defrag = $false
+				}
 			}
 		}
-	}
-	if (!($menu -eq ""))
-	{
-		if ($menu -in $quant_menu)
+
+		{$PSItem -in $WindowsDefender}
 		{
-			$Temp_menu = $false
-			Clear-Host
-			write-host "`n`nDeseja reiniciar o computador no final da execução? (Y) ou (N)"
-            		$R_temp = Read-Host -Prompt '-> '
-			if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
-            		{
-				$reiniciar = $true
-            		}
-			elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
+			$Temp_menu_defender = $true
+			while($Temp_menu_defender)
 			{
-				$reiniciar = $false
+				Clear-Host
+				write-host "`n`nQue tipo de verificação contra vírus você deseja?"
+				write-host " [1] Verificação Rápida"
+				write-host " [2] Verificação Completa`n"
+				write-host " [3] Não verificar"
+				write-host " [0] Cancelar"
+				$TypeDefender = Read-Host -Prompt '-> '
+				if ($TypeDefender -in 1,2,3)
+				{
+					$Temp_menu_defender = $false
+				}
+				elseif ($TypeDefender -eq 0)
+				{
+					$PSItem = ""
+					$Temp_menu_defender = $false
+				}
 			}
 		}
-		else
+		
+		{!($PSItem -eq "")}
 		{
-            		$Temp_menu = $true
-        	}
-	}
-}
-
-Switch ($menu){
-	
-	#Desfragmentação (1, 2)
-	{$PSItem -in $defrag}
-	{
-		if ($TypeDefrag -eq 1)
+			if ($PSItem -in $quant_menu)
+			{
+				$Temp_menu = $false
+				Clear-Host
+				write-host "`n`nDeseja reiniciar o computador no final da execução? (Y) ou (N)"
+				$R_temp = Read-Host -Prompt '-> '
+				if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
+				{
+					$reiniciar = $true
+				}
+				elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
+				{
+					$reiniciar = $false
+				}
+			}
+			else
+			{	
+				$Temp_menu = $true
+			}
+		}
+		
+		#Desfragmentação (1, 2)
+		{$PSItem -in $defrag}
 		{
-			Clear-Host
-			write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
-			write-host " processando...`n"
-			defrag C: -W -F
-			write-host "`n Desfragmentação concluida!"
+			if ($TypeDefrag -eq 1)
+			{
+				Clear-Host
+				write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
+				write-host " processando...`n"
+				defrag C: -W -F
+				write-host "`n Desfragmentação concluida!"
+			}
+			else
+			{
+				Clear-Host
+				write-host "`n`n`nDesfragmentação não será executada pois C: é um SSD."
+				write-host "É contra indicativo desfragmentar SSDs, é inutil e degrada a vida útil da peça."
+				write-host "Desfragmentar é indicado apenas em HDs (Hard Disks)."
+				write-host "`nA desfragmentação será pulada da execução."
+			}
+			timeout /t 5 /nobreak
 		}
-		else
-		{
-			Clear-Host
-			write-host "`n`n`nDesfragmentação não será executada pois C: é um SSD."
-			write-host "É contra indicativo desfragmentar SSDs, é inutil e degrada a vida útil da peça."
-			write-host "Desfragmentar é indicado apenas em HDs (Hard Disks)."
-			write-host "`nA desfragmentação será pulada da execução."
-		}
-		timeout /t 5 /nobreak
-	}
 
-	#Integridade1
-	{$PSItem -in $integridade1}
-	{
-		Clear-Host
-		write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
-		write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
-		write-host " processando..."
-		DISM /Online /Cleanup-Image /CheckHealth
-		DISM /Online /Cleanup-Image /ScanHealth
-		DISM.exe /Online /Cleanup-image /Restorehealth
-		write-host " .............`n"
-		write-host " (Passo 1) - finalizado"
-		timeout /t 5 /nobreak
-	}
-
-	#Integridade2
-	{$PSItem -in $integridade2}
-	{
-		Clear-Host
-		write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
-		write-host " processando..."
-		SFC /SCANNOW
-		write-host " .............`n"
-		write-host " (Passo 2) - finalizado"
-		timeout /t 5 /nobreak
-	}
-
-	#WindowsDefender
-	{$PSItem -in $WindowsDefender}
-	{
-		if (!($TypeDefender -eq 3)){
-			Clear-Host
-			$CurrentPath = pwd
-			Set-Location "C:\Program Files\Windows Defender"
-			Get-ChildItem
-			Clear-Host
-			write-host "`nScan Type: "$TypeDefender"`n"
-			.\mpcmdrun.exe -SignatureUpdate
-			.\mpcmdrun.exe -Scan -ScanType $TypeDefender
-			Set-Location $CurrentPath
-		}
-	}
-
-	#chkdsk checagem de disco
-	{$PSItem -in $chkdsk}
-	{
-		if ($TypeDefrag -eq 1)
+		#Integridade1
+		{$PSItem -in $integridade1}
 		{
 			Clear-Host
-			write-host "`n`n---- Leia as instruções a baixo ----`n"
-			write-host "--A Checagem de disco é demorada e necessita reiniciar."
-			write-host "--O computador não poderá ser utilizado enquando a manutenção é realizada"
-			write-host "--O computador não pode ser desligado durante a manutenção"
-			write-host "--Caso seja desligado, o disco pode sofrer corrupções, e será necessário começar a verificação do zero"
-			write-host "--O tempo estimado é 4 horas a cada 500 GBs corrigidos."
-			write-host "--Caso deseje cancelar, Digite 'N' para a pergunta a seguir:`n`n"
-			chkdsk C: /f /r
+			write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
+			write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
+			write-host " processando..."
+			DISM /Online /Cleanup-Image /CheckHealth
+			DISM /Online /Cleanup-Image /ScanHealth
+			DISM.exe /Online /Cleanup-image /Restorehealth
+			write-host " .............`n"
+			write-host " (Passo 1) - finalizado"
+			timeout /t 5 /nobreak
 		}
-		else
+
+		#Integridade2
+		{$PSItem -in $integridade2}
 		{
-			clear-host
-			write-host "A checagem não será realizada em SSDs."
+			Clear-Host
+			write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
+			write-host " processando..."
+			SFC /SCANNOW
+			write-host " .............`n"
+			write-host " (Passo 2) - finalizado"
+			timeout /t 5 /nobreak
+		}
+
+		#WindowsDefender
+		{$PSItem -in $WindowsDefender}
+		{
+			if (!($TypeDefender -eq 3)){
+				Clear-Host
+				$CurrentPath = pwd
+				Set-Location "C:\Program Files\Windows Defender"
+				Get-ChildItem
+				Clear-Host
+				write-host "`nScan Type: "$TypeDefender"`n"
+				.\mpcmdrun.exe -SignatureUpdate
+				.\mpcmdrun.exe -Scan -ScanType $TypeDefender
+				Set-Location $CurrentPath
+			}
+		}
+
+		#chkdsk checagem de disco
+		{$PSItem -in $chkdsk}
+		{
+			if ($TypeDefrag -eq 1)
+			{
+				Clear-Host
+				write-host "`n`n---- Leia as instruções a baixo ----`n"
+				write-host "--A Checagem de disco é demorada e necessita reiniciar."
+				write-host "--O computador não poderá ser utilizado enquando a manutenção é realizada"
+				write-host "--O computador não pode ser desligado durante a manutenção"
+				write-host "--Caso seja desligado, o disco pode sofrer corrupções, e será necessário começar a verificação do zero"
+				write-host "--O tempo estimado é 4 horas a cada 500 GBs corrigidos."
+				write-host "--Caso deseje cancelar, Digite 'N' para a pergunta a seguir:`n`n"
+				chkdsk C: /f /r
+			}
+			else
+			{
+				clear-host
+				write-host "A checagem não será realizada em SSDs."
+			}
 		}
 	}
-}
 
 #Reiniciar
 if ($Reiniciar)
@@ -226,4 +251,6 @@ if ($Reiniciar)
 	write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
 	timeout /t 15 /nobreak
 	Shutdown -r -f -t 0
+}
+
 }
