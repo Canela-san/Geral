@@ -2,15 +2,16 @@ chcp 65001
 
 #Declarando Variáveis
 $Temp_menu = $true
-$quant_menu = 0..6
+$quant_menu = 0..7
 $defrag = 1,2
-$integridade1 = 1,3
-$integridade2 = 1,4
-$WindowsDefender = 1,5
-$chkdsk = 6
-$PlanoDeEnergia = 7
-$DrivesWeb = 8
-$Sysinfo = 9
+$WinUpdate = 1,3
+$integridade1 = 1,4
+$integridade2 = 1,5
+$WindowsDefender = 1,6
+$chkdsk = 7
+$PlanoDeEnergia = 8
+$DrivesWeb = 9
+$Sysinfo = 10
 $reiniciar = $false
 $date = Get-Date
 
@@ -33,17 +34,18 @@ while($Temp_menu)
 	write-host $date
 	write-host "`n`n ------------------------ MENU ------------------------"
 	write-host " "
-	write-host "  [0] - Sair`n"
-	write-host "  [1] - All (2,3,4,5)"
-	write-host "  [2] - Desfragmentar"
-	write-host "  [3] - Corrigir integridade da imagem do windows"
-	write-host "  [4] - Corrigir integridade dos arquivos do Windows"
-	write-host "  [5] - Verificação de vírus"
+	write-host "  [00] - Sair`n"
+	write-host "  [01] - All (2,3,4,5)"
+	write-host "  [02] - Desfragmentar"
+	write-host "  [03] - Limpar Cache Windows Update"
+	write-host "  [04] - Corrigir integridade da imagem do windows"
+	write-host "  [05] - Corrigir integridade dos arquivos do Windows"
+	write-host "  [06] - Verificação de vírus"
 	write-host ""
-	write-host "  [6] - Verificar e corrigir defeitos de disco"
-	write-host "  [7] - Adicionar Plano de Energia (Desempenho Maximo)"
-	write-host "  [8] - Abrir páginas WEB para atualizar Drives"
-	write-host "  [9] - Verificar informações do sistema"
+	write-host "  [07] - Verificar e corrigir defeitos de disco"
+	write-host "  [08] - Adicionar Plano de Energia (Desempenho Maximo)"
+	write-host "  [09] - Abrir páginas WEB para atualizar Drives"
+	write-host "  [10] - Verificar informações do sistema"
 	write-host " "
 	write-host " ------------------------------------------------------`n"
 
@@ -184,6 +186,17 @@ while($Temp_menu)
 			timeout /t 5 /nobreak
 		}
 
+		#Windows Update
+		{$PSItem -in $WinUpdate}
+		{
+		Stop-Service wuauserv
+		Stop-Service bits
+		Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution'
+		Remove-item -Force -recurse 'C:\$WINDOWS.*BT'
+		Start-Service bits
+		Start-Service wuauserv
+		}
+		
 		#Integridade1
 		{$PSItem -in $integridade1}
 		{
