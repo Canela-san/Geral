@@ -35,7 +35,7 @@ while($Temp_menu)
 	write-host "`n`n ------------------------ MENU ------------------------"
 	write-host " "
 	write-host "  [00] - Sair`n"
-	write-host "  [01] - All (2,3,4,5)"
+	write-host "  [01] - All (2,3,4,5,6)"
 	write-host "  [02] - Desfragmentar"
 	write-host "  [03] - Limpar Cache Windows Update"
 	write-host "  [04] - Corrigir integridade da imagem do windows"
