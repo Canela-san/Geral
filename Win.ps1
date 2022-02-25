@@ -191,8 +191,12 @@ while($Temp_menu)
 		{
 			Stop-Service wuauserv
 			Stop-Service bits
-			Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution\Download'
-			if (Test-Path 'C:\$Windows.~BT'){
+			if (Test-Path 'C:\Windows\SoftwareDistribution\Download')
+                        {
+				Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution\Download'
+			}
+			if (Test-Path 'C:\$Windows.~BT')
+			{
 				Remove-item -Force -recurse 'C:\$Windows.~BT'
 			}
 			ipconfig /flushdns
