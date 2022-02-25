@@ -137,6 +137,31 @@ while($Temp_menu)
 			}
 		}
 		
+		{$PSItem -in $WinUpdate}
+		{
+			if (!(Get-Module -ListAvailable -Name PSWindowsUpdate))
+			{	
+				$temp_WinUp = $true
+				while($temp_WinUp)
+				{
+					Clear-Host
+					write-host "`n`nWindows Update no powershell não instalado."
+					write-host "Para atualizar o windows é necessário obte-lo."
+					write-host "Deseja instalar Windows Update no Powershell? (Y)Sim (N)não"
+                        		$R_temp = Read-Host -Prompt '-> '
+                        		if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
+                        		{
+                                		Install-module -Force -AcceptLicense -name PSWindowsUpdate
+                       	        	}
+					elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
+					{
+                       	                	write-host "A atualização do Windows será pulada"
+						timeout /t -1
+					}
+				}
+			}
+		}
+
 		{!($PSItem -eq "")}
 		{
 			if ($PSItem -in $quant_menu)
