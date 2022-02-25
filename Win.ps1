@@ -102,13 +102,13 @@ while($Temp_menu)
 				$TypeDefrag = Read-Host -Prompt '-> '
 							
 				if ($TypeDefrag -in 1,2)
-					{
-						$Temp_menu_defrag = $false
-					}
-					elseif ($TypeDefrag -eq 0)
-					{
-						$PSItem = ""
-						$Temp_menu_defrag = $false
+				{
+					$Temp_menu_defrag = $false
+				}
+				elseif ($TypeDefrag -eq 0)
+				{
+					$PSItem = ""
+					$Temp_menu_defrag = $false
 				}
 			}
 		}
