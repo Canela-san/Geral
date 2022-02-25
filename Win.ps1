@@ -189,12 +189,16 @@ while($Temp_menu)
 		#Windows Update
 		{$PSItem -in $WinUpdate}
 		{
-		Stop-Service wuauserv
-		Stop-Service bits
-		Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution'
-		Remove-item -Force -recurse 'C:\$WINDOWS.*BT'
-		Start-Service bits
-		Start-Service wuauserv
+			Stop-Service wuauserv
+			Stop-Service bits
+			Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution\Download'
+			if (Test-Path 'C:\$Windows.~BT'){
+				Remove-item -Force -recurse 'C:\$Windows.~BT'
+			}
+			ipconfig /flushdns
+			Rundll32.exe advapi32.dll,ProcessIdleTasks
+			Start-Service bits
+			Start-Service wuauserv
 		}
 		
 		#Integridade1
