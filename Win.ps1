@@ -152,9 +152,11 @@ while($Temp_menu)
                         		if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
                         		{
                                 		Install-module -Force -AcceptLicense -name PSWindowsUpdate
-                       	        	}
+                       	        		$temp_WinUp = $false
+					}
 					elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
 					{
+						$temp_WinUp = $false
                        	                	write-host "A atualização do Windows será pulada"
 						timeout /t -1
 					}
