@@ -22,7 +22,7 @@ if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups 
 	Write-host "`n-----------------------------------------------------------------------------"
 	Write-Host "`n`nPrivilégios Insuficientes, execute como administrador"
 	Write-Host "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
-	Write-host "`n`n-----------------------------------------------------------------------------"
+	Write-host "`n`n------------------------------------------------i-----------------------------"
 	timeout /t -1
 	exit
 }
@@ -32,7 +32,7 @@ while($Temp_menu)
 {
 	Clear-Host
 	write-host $date
-	write-host "`n`n ------------------------ MENU ------------------------"
+	write-host "`n`n -------------------------- MENU --------------------------"
 	write-host " "
 	write-host "  [00] - Sair`n"
 	write-host "  [01] - All (2,3,4,5,6)"
@@ -47,7 +47,7 @@ while($Temp_menu)
 	write-host "  [09] - Abrir páginas WEB para atualizar Drives"
 	write-host "  [10] - Verificar informações do sistema"
 	write-host " "
-	write-host " ------------------------------------------------------`n"
+	write-host " ----------------------------------------------------------`n"
 
 
 	$menu = Read-Host -Prompt '-> '
