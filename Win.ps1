@@ -57,6 +57,7 @@ while($Temp_menu)
 
 		0 #Sair
 		{
+			Clear-Host
 			Exit
 		}
 
