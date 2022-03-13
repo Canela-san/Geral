@@ -217,20 +217,34 @@ while($Temp_menu)
 		#Windows Update
 		{$PSItem -in $WinUpdate}
 		{
-			Stop-Service wuauserv
-			Stop-Service bits
-			if (Test-Path 'C:\Windows\SoftwareDistribution\Download')
+			net stop wuauserv
+			net stop cryptSvc
+			net stop bits
+			net stop msiserver
+			
+			if (Test-Path 'C:\Windows\SoftwareDistribution.old')
                         {
-				Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution\Download'
+				Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution.old'
 			}
+			if (Test-Path 'C:\Windows\System32\catroot2.old')
+                        {
+                                Remove-item -Force -recurse 'C:\Windows\System32\catroot2.old'
+                        }
 			if (Test-Path 'C:\$Windows.~BT')
 			{
 				Remove-item -Force -recurse 'C:\$Windows.~BT'
 			}
+			
+			ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
+			ren C:\Windows\System32\catroot2 Catroot2.old
+			
 			ipconfig /flushdns
 			Rundll32.exe advapi32.dll,ProcessIdleTasks
-			Start-Service bits
+			
 			Start-Service wuauserv
+			Start-Service cryptSvc
+			Start-Service bits
+			Start-Service msiserver
 		}
 		
 		#Integridade1
