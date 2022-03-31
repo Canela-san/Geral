@@ -217,11 +217,21 @@ while($Temp_menu)
 		#Windows Update
 		{$PSItem -in $WinUpdate}
 		{
-			Stop-Service bits
-			Stop-Service wuauserv
-			Stop-Service msiserver
-			Stop-Service cryptsvc
-			Stop-Service appidsvc			
+			SC config wuauserv type= share
+			SC config bits type= share
+			SC config cryptsvc type= share
+			SC config trustedinstaller type= share
+
+			SC config wuauserv start= auto
+			SC config bits start= auto
+			SC config cryptsvc start= auto
+			SC config trustedinstaller start= auto
+
+			Stop-Service -Force bits
+			Stop-Service -Force wuauserv
+			Stop-Service -Force msiserver
+			Stop-Service -Force cryptsvc
+			Stop-Service -Force appidsvc			
 			
 			if (Test-Path 'C:\Windows\SoftwareDistribution.old')
                         {
