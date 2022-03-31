@@ -22,7 +22,7 @@ if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups 
 	Write-host "`n-----------------------------------------------------------------------------"
 	Write-Host "`n`nPrivilégios Insuficientes, execute como administrador"
 	Write-Host "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
-	Write-host "`n`n------------------------------------------------i-----------------------------"
+	Write-host "`n`n-----------------------------------------------------------------------------"
 	timeout /t -1
 	exit
 }
@@ -217,10 +217,11 @@ while($Temp_menu)
 		#Windows Update
 		{$PSItem -in $WinUpdate}
 		{
-			net stop wuauserv
-			net stop cryptSvc
-			net stop bits
-			net stop msiserver
+			Stop-Service bits
+			Stop-Service wuauserv
+			Stop-Service msiserver
+			Stop-Service cryptsvc
+			Stop-Service appidsvc			
 			
 			if (Test-Path 'C:\Windows\SoftwareDistribution.old')
                         {
@@ -237,14 +238,65 @@ while($Temp_menu)
 			
 			ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
 			ren C:\Windows\System32\catroot2 Catroot2.old
-			
+			Del "C:\ProgramData\Microsoft\Network\Downloader\qmgr*.dat"
+
 			ipconfig /flushdns
-			Rundll32.exe advapi32.dll,ProcessIdleTasks
-			
-			Start-Service wuauserv
-			Start-Service cryptSvc
+			ipconfig /Release
+			ipconfig /Renew
+			netsh winsock reset
+			netsh winsock reset proxy
+			netsh winhttp reset proxy
+
+			rundll32.exe advapi32.dll,ProcessIdleTasks
+			rundll32.exe pnpclean.dll,RunDLL_PnpClean /DRIVERS /MAXCLEAN
+
+			 CMD /C "sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+
+			 CMD /C "sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+
+			regsvr32.exe /s /s atl.dll
+			regsvr32.exe /s /s urlmon.dll
+			regsvr32.exe /s /s mshtml.dll
+			regsvr32.exe /s /s shdocvw.dll
+			regsvr32.exe /s /s browseui.dll
+			regsvr32.exe /s /s jscript.dll
+			regsvr32.exe /s /s vbscript.dll
+			regsvr32.exe /s scrrun.dll
+			regsvr32.exe /s msxml.dll
+			regsvr32.exe /s msxml3.dll
+			regsvr32.exe /s msxml6.dll
+			regsvr32.exe /s actxprxy.dll
+			regsvr32.exe /s softpub.dll
+			regsvr32.exe /s wintrust.dll
+			regsvr32.exe /s dssenh.dll
+			regsvr32.exe /s rsaenh.dll
+			regsvr32.exe /s gpkcsp.dll
+			regsvr32.exe /s sccbase.dll
+			regsvr32.exe /s slbcsp.dll
+			regsvr32.exe /s cryptdlg.dll
+			regsvr32.exe /s oleaut32.dll
+			regsvr32.exe /s ole32.dll
+			regsvr32.exe /s shell32.dll
+			regsvr32.exe /s initpki.dll
+			regsvr32.exe /s wuapi.dll
+			regsvr32.exe /s wuaueng.dll
+			regsvr32.exe /s wuaueng1.dll
+			regsvr32.exe /s wucltui.dll
+			regsvr32.exe /s wups.dll
+			regsvr32.exe /s wups2.dll
+			regsvr32.exe /s wuweb.dll
+			regsvr32.exe /s qmgr.dll
+			regsvr32.exe /s qmgrprxy.dll
+			regsvr32.exe /s wucltux.dll
+			regsvr32.exe /s muweb.dll
+			regsvr32.exe /s wuwebv.dll
+
 			Start-Service bits
+			Start-Service wuauserv
 			Start-Service msiserver
+			Start-Service cryptsvc
+			Start-Service appidsvc
+		
 		}
 		
 		#Integridade1
@@ -256,7 +308,8 @@ while($Temp_menu)
 			write-host " processando..."
 			DISM /Online /Cleanup-Image /CheckHealth
 			DISM /Online /Cleanup-Image /ScanHealth
-			DISM.exe /Online /Cleanup-image /Restorehealth
+			DISM /Online /Cleanup-image /Restorehealth
+			dism /Online /Cleanup-image /StartComponentCleanup
 			write-host " .............`n"
 			write-host " (Passo 1) - finalizado"
 			timeout /t 5 /nobreak
