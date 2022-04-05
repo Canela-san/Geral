@@ -12,6 +12,7 @@ $chkdsk = 7
 $PlanoDeEnergia = 8
 $DrivesWeb = 9
 $Sysinfo = 10
+$Bluetooth = 11
 $reiniciar = $false
 $date = Get-Date
 
@@ -46,6 +47,7 @@ while($Temp_menu)
 	write-host "  [08] - Adicionar Plano de Energia (Desempenho Maximo)"
 	write-host "  [09] - Abrir páginas WEB para atualizar Drives"
 	write-host "  [10] - Verificar informações do sistema"
+	write-host "  [11] - Recarregar módulos bluetooth"
 	write-host " "
 	write-host " ----------------------------------------------------------`n"
 
@@ -87,6 +89,14 @@ while($Temp_menu)
 			Clear-Host
 			Systeminfo
 			timeout /t -1
+		}
+
+		{$PSItem -eq $Bluetooth}
+		{
+			Restart-Service -Force bthserv
+			Restart-Service -Force BTAGService
+			Restart-Service -Force DevicesFlowUserSvc_a521d
+			timeout /t 5 /nobreak
 		}
 
 		{($PSItem -in $defrag) -or ($PSItem -in $chkdsk)}
