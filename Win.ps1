@@ -33,7 +33,8 @@ while($Temp_menu)
 {
 	Clear-Host
 	write-host $date
-	write-host "`n`n -------------------------- MENU --------------------------"
+	write-host "`n"
+	write-host " -------------------------- MENU --------------------------"
 	write-host " "
 	write-host "  [00] - Sair`n"
 	write-host "  [01] - All (2,3,4,5,6)"
@@ -329,7 +330,7 @@ while($Temp_menu)
 			DISM /Online /Cleanup-Image /CheckHealth
 			DISM /Online /Cleanup-Image /ScanHealth
 			DISM /Online /Cleanup-image /Restorehealth
-			dism /Online /Cleanup-image /StartComponentCleanup
+			DISM /Online /Cleanup-image /StartComponentCleanup
 			write-host " .............`n"
 			write-host " (Passo 1) - finalizado"
 			timeout /t 5 /nobreak
@@ -357,6 +358,7 @@ while($Temp_menu)
 				Get-ChildItem
 				Clear-Host
 				write-host "`nScan Type: "$TypeDefender"`n"
+
 				.\mpcmdrun.exe -SignatureUpdate
 				.\mpcmdrun.exe -Scan -ScanType $TypeDefender
 				Set-Location $CurrentPath
