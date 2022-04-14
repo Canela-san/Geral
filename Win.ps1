@@ -196,6 +196,17 @@ while($Temp_menu)
 				{
 					$reiniciar = "Desligar"
 				}
+				Clear-Host
+				write-host "`n`n Deseja que seja registrado um log de sucesso de execução na área de atrabalho? [Y]Sim [N]Não"
+				$R_temp = Read-Host -Prompt '-> '
+                                if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
+                                {
+                                        $Log = $true
+                                }
+                                elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
+                                {
+                                        $Log = $false
+                                }
 			}
 			else
 			{	
