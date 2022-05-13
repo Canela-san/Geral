@@ -4,7 +4,7 @@ chcp 65001
 $Temp_menu = $true
 $quant_menu = 0..7
 $defrag = 1,2
-$WinUpdate = 1,3
+$WinUpdate = 3
 $integridade1 = 1,4
 $integridade2 = 1,5
 $WindowsDefender = 1,6
