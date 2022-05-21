@@ -9,6 +9,7 @@ $integridade1 = 1,4
 $integridade2 = 1,5
 $WindowsDefender = 1,6
 $chkdsk = 7
+$Disk = 99
 $PlanoDeEnergia = 8
 $DrivesWeb = 9
 $Sysinfo = 10
@@ -58,6 +59,11 @@ while($Temp_menu)
 	Switch ($menu)
 	{
 
+		{$PSItem -eq $Disk}
+		{
+			Get-PSDrive | Select-String “FileSystem”
+			pause
+		}
 		0 #Sair
 		{
 			Clear-Host
