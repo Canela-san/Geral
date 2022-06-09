@@ -4,7 +4,7 @@ $CurrentPath = pwd
 $CurrentPath
 Write-Host "Caminho é $CurrentPath"
 Set-Location $PSScriptRoot
-Write-Host "Caminho é $CurrentPath"
+Write-Host "Caminho é $PSScriptRoot"
 $CurrentPath = pwd
 $CurrentPath
 write-host "------- Aaaaatualizando a pasta .config ------- `n"
