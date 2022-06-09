@@ -1,3 +1,6 @@
+Set-Alias vaca "$location + '\Win.ps1'"
+$location
+Function Optimise-Win {
 chcp 65001
 
 #Declarando Variáveis
@@ -420,4 +423,5 @@ while($Temp_menu)
         	timeout /t 15 /nobreak
         	Shutdown -s -f -t 0
 	}
+}
 }
