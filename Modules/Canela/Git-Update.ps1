@@ -2,7 +2,9 @@ Set-Alias update Git-Update
 Function Git-Update {
 $CurrentPath = pwd
 $CurrentPath
+Write-Host "Caminho é $CurrentPath"
 Set-Location $PSScriptRoot
+Write-Host "Caminho é $CurrentPath"
 $CurrentPath = pwd
 $CurrentPath
 write-host "------- Atualizando a pasta .config ------- `n"
