@@ -69,7 +69,7 @@ Function Optimise-Win {
 			0 #Sair
 			{
 				Clear-Host
-				Exit
+				exit
 			}
 
 			{$PSItem -eq $PlanoDeEnergia}
