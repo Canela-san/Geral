@@ -7,7 +7,7 @@ Set-Location $PSScriptRoot
 Write-Host "Caminho é $CurrentPath"
 $CurrentPath = pwd
 $CurrentPath
-write-host "------- Atualizando a pasta .config ------- `n"
+write-host "------- Aaaaatualizando a pasta .config ------- `n"
 $SourcePath = 'C:\Users\Canela\.config'
 $DestinationPath = 'C:\Users\Canela\Geral\.config'
 robocopy $SourcePath $DestinationPath /E
