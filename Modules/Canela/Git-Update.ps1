@@ -1,7 +1,7 @@
 Set-Alias update Git-Update
 Function Git-Update {
 $CurrentPath = pwd
-Set-Location $PSScriptRoot
+Set-Location $PSScriptRoot/../..
 <#
 write-host "------- Atualizando a pasta .config ------- `n"
 $SourcePath = 'C:\Users\Canela\.config'
