@@ -1,5 +1,4 @@
-Set-Alias vaca "$location + '\Win.ps1'"
-$location
+Set-Alias Win Optimise-Win
 Function Optimise-Win {
 chcp 65001
 
