@@ -18,6 +18,7 @@ Function Optimise-Win {
 	$Bluetooth = 11
 	$reiniciar = $false
 	$date = Get-Date
+	$Ending = $true
 
 	#Testando Privilégios Administrativos
 	if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match"S-1-5-32-544")))
@@ -127,13 +128,13 @@ Function Optimise-Win {
 					}
 					elseif ($TypeDefrag -eq 0)
 					{
-						$PSItem = ""
+						$Ending = ""
 						$Temp_menu_defrag = $false
 					}
 				}
 			}
 
-			{$PSItem -in $WindowsDefender}
+			{($PSItem -in $WindowsDefender) -or ($Ending -ass $)}
 			{
 				$Temp_menu_defender = $true
 				while($Temp_menu_defender)
