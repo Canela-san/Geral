@@ -151,12 +151,11 @@ Function Optimise-Win {
 					}
 					elseif ($TypeDefender -eq 0)
 					{
-						$PSItem = ""
+						$PSItem = "";
 						$Temp_menu_defender = $false
 					}
 				}
 			}
-			
 			{$PSItem -in $WinUpdate}
 			{
 				if (!(Get-Module -ListAvailable -Name PSWindowsUpdate))
