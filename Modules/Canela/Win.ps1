@@ -128,13 +128,13 @@ Function Optimise-Win {
 					}
 					elseif ($TypeDefrag -eq 0)
 					{
-						$Ending = ""
+						$PSItem = ""
 						$Temp_menu_defrag = $false
 					}
 				}
 			}
 
-			{($PSItem -in $WindowsDefender) -or ($Ending -ass $)}
+			{($PSItem -in $WindowsDefender)}
 			{
 				$Temp_menu_defender = $true
 				while($Temp_menu_defender)
