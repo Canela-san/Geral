@@ -1,7 +1,7 @@
 Set-Alias win Optimise-Win
 Function Optimise-Win {
 	chcp 65001
-
+dwadwa
 	#Declarando Variáveis
 	$Temp_menu = $true
 	$quant_menu = 0..7
