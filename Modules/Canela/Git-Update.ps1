@@ -3,7 +3,7 @@ Set-Alias GeralUp Update-GeralGit
 $Project_name = ""
 Function Update-GeralGit {
 $CurrentPath = Get-Location
-echo $CurrentPath.LastIndexOf('/');
+$CurrentPath.LastIndexOf('/');
 
 Set-Location $PSScriptRoot/../..
 <#
