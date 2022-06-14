@@ -9,3 +9,5 @@ else
 	Install-module -Force -AcceptLicense -name PSWindowsUpdate
 }
 #>
+$CurrentPath = (Get-Location).path
+$CurrentPath.LastIndexOf('/');
