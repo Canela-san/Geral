@@ -17,7 +17,6 @@ Function Optimise-Win {
 	$Bluetooth = 11
 	$reiniciar = $false
 	$date = Get-Date
-	$Ending = $true
 
 	#Testando Privilégios Administrativos
 	if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match"S-1-5-32-544")))
