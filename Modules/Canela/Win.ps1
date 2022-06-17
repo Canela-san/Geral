@@ -211,102 +211,96 @@ Function Start-Win {
 			}
 
 			#Windows Update
-			<#
-			{$PSItem -in $WinUpdate}
-			{
-				SC config wuauserv type= share
-				SC config bits type= share
-				SC config cryptsvc type= share
-				SC config trustedinstaller type= share
-
-				SC config wuauserv start= auto
-				SC config bits start= auto
-				SC config cryptsvc start= auto
-				SC config trustedinstaller start= auto
-
-				Stop-Service -Force bits
-				Stop-Service -Force wuauserv
-				Stop-Service -Force msiserver
-				Stop-Service -Force cryptsvc
-				Stop-Service -Force appidsvc			
-				
-				if (Test-Path 'C:\Windows\SoftwareDistribution.old')
-							{
-					Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution.old'
-				}
-				if (Test-Path 'C:\Windows\System32\catroot2.old')
-							{
-									Remove-item -Force -recurse 'C:\Windows\System32\catroot2.old'
-							}
-				if (Test-Path 'C:\$Windows.~BT')
-				{
-					Remove-item -Force -recurse 'C:\$Windows.~BT'
-				}
-				
-				ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
-				ren C:\Windows\System32\catroot2 Catroot2.old
-				Del "C:\ProgramData\Microsoft\Network\Downloader\qmgr*.dat"
-
-				ipconfig /flushdns
-				ipconfig /Release
-				ipconfig /Renew
-				netsh winsock reset
-				netsh winsock reset proxy
-				netsh winhttp reset proxy
-
-				rundll32.exe advapi32.dll,ProcessIdleTasks
-				rundll32.exe pnpclean.dll,RunDLL_PnpClean /DRIVERS /MAXCLEAN
-
-				 CMD /C "sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
-
-				 CMD /C "sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
-
-				regsvr32.exe /s /s atl.dll
-				regsvr32.exe /s /s urlmon.dll
-				regsvr32.exe /s /s mshtml.dll
-				regsvr32.exe /s /s shdocvw.dll
-				regsvr32.exe /s /s browseui.dll
-				regsvr32.exe /s /s jscript.dll
-				regsvr32.exe /s /s vbscript.dll
-				regsvr32.exe /s scrrun.dll
-				regsvr32.exe /s msxml.dll
-				regsvr32.exe /s msxml3.dll
-				regsvr32.exe /s msxml6.dll
-				regsvr32.exe /s actxprxy.dll
-				regsvr32.exe /s softpub.dll
-				regsvr32.exe /s wintrust.dll
-				regsvr32.exe /s dssenh.dll
-				regsvr32.exe /s rsaenh.dll
-				regsvr32.exe /s gpkcsp.dll
-				regsvr32.exe /s sccbase.dll
-				regsvr32.exe /s slbcsp.dll
-				regsvr32.exe /s cryptdlg.dll
-				regsvr32.exe /s oleaut32.dll
-				regsvr32.exe /s ole32.dll
-				regsvr32.exe /s shell32.dll
-				regsvr32.exe /s initpki.dll
-				regsvr32.exe /s wuapi.dll
-				regsvr32.exe /s wuaueng.dll
-				regsvr32.exe /s wuaueng1.dll
-				regsvr32.exe /s wucltui.dll
-				regsvr32.exe /s wups.dll
-				regsvr32.exe /s wups2.dll
-				regsvr32.exe /s wuweb.dll
-				regsvr32.exe /s qmgr.dll
-				regsvr32.exe /s qmgrprxy.dll
-				regsvr32.exe /s wucltux.dll
-				regsvr32.exe /s muweb.dll
-				regsvr32.exe /s wuwebv.dll
-
-				Start-Service bits
-				Start-Service wuauserv
-				Start-Service msiserver
-				Start-Service cryptsvc
-				Start-Service appidsvc
 			
-			}
-			#>
-			
+			# { $PSItem -in $WinUpdate } {
+			# 	SC config wuauserv type= share
+			# 	SC config bits type= share
+			# 	SC config cryptsvc type= share
+			# 	SC config trustedinstaller type= share
+
+			# 	SC config wuauserv start= auto
+			# 	SC config bits start= auto
+			# 	SC config cryptsvc start= auto
+			# 	SC config trustedinstaller start= auto
+
+			# 	Stop-Service -Force bits
+			# 	Stop-Service -Force wuauserv
+			# 	Stop-Service -Force msiserver
+			# 	Stop-Service -Force cryptsvc
+			# 	Stop-Service -Force appidsvc			
+				
+			# 	if (Test-Path 'C:\Windows\SoftwareDistribution.old') {
+			# 		Remove-item -Force -recurse 'C:\Windows\SoftwareDistribution.old'
+			# 	}
+			# 	if (Test-Path 'C:\Windows\System32\catroot2.old') {
+			# 		Remove-item -Force -recurse 'C:\Windows\System32\catroot2.old'
+			# 	}
+			# 	if (Test-Path 'C:\$Windows.~BT') {
+			# 		Remove-item -Force -recurse 'C:\$Windows.~BT'
+			# 	}
+				
+			# 	Rename-Item C:\Windows\SoftwareDistribution SoftwareDistribution.old
+			# 	Rename-Item C:\Windows\System32\catroot2 Catroot2.old
+			# 	Remove-Item "C:\ProgramData\Microsoft\Network\Downloader\qmgr*.dat"
+
+			# 	ipconfig /flushdns
+			# 	ipconfig /Release
+			# 	ipconfig /Renew
+			# 	netsh winsock reset
+			# 	netsh winsock reset proxy
+			# 	netsh winhttp reset proxy
+
+			# 	rundll32.exe advapi32.dll, ProcessIdleTasks
+			# 	rundll32.exe pnpclean.dll, RunDLL_PnpClean /DRIVERS /MAXCLEAN
+
+			# 	CMD /C "sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+
+			# 	CMD /C "sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+
+			# 	regsvr32.exe /s /s atl.dll
+			# 	regsvr32.exe /s /s urlmon.dll
+			# 	regsvr32.exe /s /s mshtml.dll
+			# 	regsvr32.exe /s /s shdocvw.dll
+			# 	regsvr32.exe /s /s browseui.dll
+			# 	regsvr32.exe /s /s jscript.dll
+			# 	regsvr32.exe /s /s vbscript.dll
+			# 	regsvr32.exe /s scrrun.dll
+			# 	regsvr32.exe /s msxml.dll
+			# 	regsvr32.exe /s msxml3.dll
+			# 	regsvr32.exe /s msxml6.dll
+			# 	regsvr32.exe /s actxprxy.dll
+			# 	regsvr32.exe /s softpub.dll
+			# 	regsvr32.exe /s wintrust.dll
+			# 	regsvr32.exe /s dssenh.dll
+			# 	regsvr32.exe /s rsaenh.dll
+			# 	regsvr32.exe /s gpkcsp.dll
+			# 	regsvr32.exe /s sccbase.dll
+			# 	regsvr32.exe /s slbcsp.dll
+			# 	regsvr32.exe /s cryptdlg.dll
+			# 	regsvr32.exe /s oleaut32.dll
+			# 	regsvr32.exe /s ole32.dll
+			# 	regsvr32.exe /s shell32.dll
+			# 	regsvr32.exe /s initpki.dll
+			# 	regsvr32.exe /s wuapi.dll
+			# 	regsvr32.exe /s wuaueng.dll
+			# 	regsvr32.exe /s wuaueng1.dll
+			# 	regsvr32.exe /s wucltui.dll
+			# 	regsvr32.exe /s wups.dll
+			# 	regsvr32.exe /s wups2.dll
+			# 	regsvr32.exe /s wuweb.dll
+			# 	regsvr32.exe /s qmgr.dll
+			# 	regsvr32.exe /s qmgrprxy.dll
+			# 	regsvr32.exe /s wucltux.dll
+			# 	regsvr32.exe /s muweb.dll
+			# 	regsvr32.exe /s wuwebv.dll
+
+			# 	Start-Service bits
+			# 	Start-Service wuauserv
+			# 	Start-Service msiserver
+			# 	Start-Service cryptsvc
+			# 	Start-Service appidsvc			
+			# }
+
 			#Integridade1
 			{ $PSItem -in $integridade1 } {
 				Clear-Host
