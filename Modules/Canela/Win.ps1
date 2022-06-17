@@ -1,14 +1,14 @@
-Set-Alias win S-Win
-Function S-Win {
+Set-Alias win Start-Win
+Function Start-Win {
 	chcp 65001
 	#Declarando Variáveis
 	$Temp_menu = $true
 	$quant_menu = 0..7
-	$defrag = 1,2
+	$defrag = 1, 2
 	$WinUpdate = 3
-	$integridade1 = 1,4
-	$integridade2 = 1,5
-	$WindowsDefender = 1,6
+	$integridade1 = 1, 4
+	$integridade2 = 1, 5
+	$WindowsDefender = 1, 6
 	$chkdsk = 7
 	$Disk = 99
 	$PlanoDeEnergia = 8
@@ -19,8 +19,7 @@ Function S-Win {
 	$date = Get-Date
 
 	#Testando Privilégios Administrativos
-	if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match"S-1-5-32-544")))
-	{
+	if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544"))) {
 		Clear-Host
 		Write-host "`n-----------------------------------------------------------------------------"
 		Write-Host "`n`nPrivilégios Insuficientes, execute como administrador"
@@ -31,8 +30,7 @@ Function S-Win {
 	}
 
 	#Menu
-	while($Temp_menu)
-	{
+	while ($Temp_menu) {
 		Clear-Host
 		write-host $date
 		write-host "`n"
@@ -57,32 +55,28 @@ Function S-Win {
 
 		$menu = Read-Host -Prompt '-> '
 		
-		Switch ($menu)
-		{
+		Switch ($menu) {
 
-			{$PSItem -eq $Disk}
-			{
+			{ $PSItem -eq $Disk } {
 				Get-PSDrive | Select-String “FileSystem”
 				pause
 			}
-			0 #Sair
-			{
+			0 {
+				#Sair
 				Clear-Host
 				exit
 			}
 
-			{$PSItem -eq $PlanoDeEnergia}
-					{
-							Clear-Host
+			{ $PSItem -eq $PlanoDeEnergia } {
+				Clear-Host
 				write-host "`n"
-							powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
-							timeout /t -1
-					}
+				powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+				timeout /t -1
+			}
 
-			{$PSItem -eq $DrivesWeb}
-					{
-							Clear-Host
-							write-host "`nAbrindo Abas Web:"
+			{ $PSItem -eq $DrivesWeb } {
+				Clear-Host
+				write-host "`nAbrindo Abas Web:"
 				write-host "  - Drive Boost"
 				write-host "  - Chaves para Drive Boost"
 				write-host "  - Nvidia GeForce Experience"
@@ -90,28 +84,24 @@ Function S-Win {
 				Start-Process "https://www.gustavortech.com/2020/04/iobit-driver-booster.html"
 				Start-Process "https://www.nvidia.com/pt-br/geforce/geforce-experience/"
 				timeout /t -1
-					}
+			}
 
-			{$PSItem -eq $Sysinfo}
-			{
+			{ $PSItem -eq $Sysinfo } {
 				Clear-Host
 				Systeminfo
 				timeout /t -1
 			}
 
-			{$PSItem -eq $Bluetooth}
-			{
+			{ $PSItem -eq $Bluetooth } {
 				Restart-Service -Force bthserv
 				Restart-Service -Force BTAGService
 				Restart-Service -Force DevicesFlowUserSvc_a521d
 				timeout /t 5 /nobreak
 			}
 
-			{($PSItem -in $defrag) -or ($PSItem -in $chkdsk)}
-			{
+			{ ($PSItem -in $defrag) -or ($PSItem -in $chkdsk) } {
 				$temp_menu_defrag = $true
-				while($temp_menu_defrag)
-				{
+				while ($temp_menu_defrag) {
 					Clear-Host
 					write-host "`n`nO diretório C: é um HD ou SSD?"
 					write-host " [1] HD (Hard Disk)"
@@ -120,23 +110,19 @@ Function S-Win {
 					
 					$TypeDefrag = Read-Host -Prompt '-> '
 								
-					if ($TypeDefrag -in 1,2)
-					{
+					if ($TypeDefrag -in 1, 2) {
 						$Temp_menu_defrag = $false
 					}
-					elseif ($TypeDefrag -eq 0)
-					{
+					elseif ($TypeDefrag -eq 0) {
 						$PSItem = ""
 						$Temp_menu_defrag = $false
 					}
 				}
 			}
 
-			{($PSItem -in $WindowsDefender)}
-			{
+			{ ($PSItem -in $WindowsDefender) } {
 				$Temp_menu_defender = $true
-				while($Temp_menu_defender)
-				{
+				while ($Temp_menu_defender) {
 					Clear-Host
 					write-host "`n`nQue tipo de verificação contra vírus você deseja?"
 					write-host " [1] Verificação Rápida"
@@ -144,95 +130,77 @@ Function S-Win {
 					write-host " [3] Não verificar"
 					write-host " [0] Cancelar"
 					$TypeDefender = Read-Host -Prompt '-> '
-					if ($TypeDefender -in 1,2,3)
-					{
+					if ($TypeDefender -in 1, 2, 3) {
 						$Temp_menu_defender = $false
 					}
-					elseif ($TypeDefender -eq 0)
-					{
+					elseif ($TypeDefender -eq 0) {
 						$PSItem = "";
 						$Temp_menu_defender = $false
 					}
 				}
 			}
-			{$PSItem -in $WinUpdate}
-			{
-				if (!(Get-Module -ListAvailable -Name PSWindowsUpdate))
-				{	
+			{ $PSItem -in $WinUpdate } {
+				if (!(Get-Module -ListAvailable -Name PSWindowsUpdate)) {	
 					$temp_WinUp = $true
-					while($temp_WinUp)
-					{
+					while ($temp_WinUp) {
 						Clear-Host
 						write-host "`n`nWindows Update no powershell não instalado."
 						write-host "Para atualizar o windows é necessário obte-lo."
 						write-host "Deseja instalar Windows Update no Powershell? (Y)Sim (N)não"
-									$R_temp = Read-Host -Prompt '-> '
-									if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
-									{
-											Install-module -Force -AcceptLicense -name PSWindowsUpdate
-											$temp_WinUp = $false
-						}
-						elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
-						{
+						$R_temp = Read-Host -Prompt '-> '
+						if (($R_temp -eq 'Y') -or ($R_temp -eq 'y')) {
+							Install-module -Force -AcceptLicense -name PSWindowsUpdate
 							$temp_WinUp = $false
-												write-host "A atualização do Windows será pulada"
+						}
+						elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n')) {
+							$temp_WinUp = $false
+							write-host "A atualização do Windows será pulada"
 							timeout /t -1
 						}
 					}
 				}
 			}
 
-			{!($PSItem -eq "")}
-			{
-				if ($PSItem -in $quant_menu)
-				{
+			{ !($PSItem -eq "") } {
+				if ($PSItem -in $quant_menu) {
 					$Temp_menu = $false
 					Clear-Host
 					write-host "`n`nDeseja reiniciar o computador no final da execução? (Y)Sim (N)não (D)Desligar"
 					$R_temp = Read-Host -Prompt '-> '
-					if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
-					{
+					if (($R_temp -eq 'Y') -or ($R_temp -eq 'y')) {
 						$reiniciar = $true
 					}
-					elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
-					{
+					elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n')) {
 						$reiniciar = $false
 					}
-					elseif (($R_temp -eq 'd') -or ($R_temp -eq 'D'))
-					{
+					elseif (($R_temp -eq 'd') -or ($R_temp -eq 'D')) {
 						$reiniciar = "Desligar"
 					}
 					Clear-Host
 					write-host "`n`n Deseja que seja registrado um log de sucesso de execução na área de atrabalho? [Y]Sim [N]Não"
 					$R_temp = Read-Host -Prompt '-> '
-									if (($R_temp -eq 'Y') -or ($R_temp -eq 'y'))
-									{
-											$Log = $true
-									}
-									elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n'))
-									{
-											$Log = $false
-									}
+					if (($R_temp -eq 'Y') -or ($R_temp -eq 'y')) {
+						$Log = $true
+					}
+					elseif (($R_temp -eq 'N') -or ($R_temp -eq 'n')) {
+						$Log = $false
+					}
 				}
-				else
-				{	
+				else {	
 					$Temp_menu = $true
 				}
 			}
 			
 			#Desfragmentação (1, 2)
-			{$PSItem -in $defrag}
-			{
-				if ($TypeDefrag -eq 1)
-				{
+			{ $PSItem -in $defrag } {
+				if ($TypeDefrag -eq 1) {
 					Clear-Host
 					write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
 					write-host " processando...`n"
 					defrag C: -W -F
 					write-host "`n Desfragmentação concluida!"
 				}
-				else
-				{
+				else {
 					Clear-Host
 					write-host "`n`n`nDesfragmentação não será executada pois C: é um SSD."
 					write-host "É contra indicativo desfragmentar SSDs, é inutil e degrada a vida útil da peça."
@@ -340,8 +308,7 @@ Function S-Win {
 			#>
 			
 			#Integridade1
-			{$PSItem -in $integridade1}
-			{
+			{ $PSItem -in $integridade1 } {
 				Clear-Host
 				write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
 				write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
@@ -356,8 +323,7 @@ Function S-Win {
 			}
 
 			#Integridade2
-			{$PSItem -in $integridade2}
-			{
+			{ $PSItem -in $integridade2 } {
 				Clear-Host
 				write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
 				write-host " processando..."
@@ -368,9 +334,8 @@ Function S-Win {
 			}
 
 			#WindowsDefender
-			{$PSItem -in $WindowsDefender}
-			{
-				if (!($TypeDefender -eq 3)){
+			{ $PSItem -in $WindowsDefender } {
+				if (!($TypeDefender -eq 3)) {
 					Clear-Host
 					$CurrentPath = pwd
 					Set-Location "C:\Program Files\Windows Defender"
@@ -385,10 +350,8 @@ Function S-Win {
 			}
 
 			#chkdsk checagem de disco
-			{$PSItem -in $chkdsk}
-			{
-				if ($TypeDefrag -eq 1)
-				{
+			{ $PSItem -in $chkdsk } {
+				if ($TypeDefrag -eq 1) {
 					Clear-Host
 					write-host "`n`n---- Leia as instruções a baixo ----`n"
 					write-host "--A Checagem de disco é demorada e necessita reiniciar."
@@ -399,8 +362,7 @@ Function S-Win {
 					write-host "--Caso deseje cancelar, Digite 'N' para a pergunta a seguir:`n`n"
 					chkdsk C: /f /r
 				}
-				else
-				{
+				else {
 					clear-host
 					write-host "A checagem não será realizada em SSDs."
 				}
@@ -408,19 +370,17 @@ Function S-Win {
 		}
 
 		#Reiniciar
-		if ($Reiniciar -eq $true)
-		{
+		if ($Reiniciar -eq $true) {
 			Clear-Host
 			write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
 			timeout /t 15 /nobreak
 			Shutdown -r -f -t 0
 		}
-		elseif ($Reiniciar -eq "Desligar")
-		{	      
+		elseif ($Reiniciar -eq "Desligar") {	      
 			Clear-Host
-				write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
-				timeout /t 15 /nobreak
-				Shutdown -s -f -t 0
+			write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
+			timeout /t 15 /nobreak
+			Shutdown -s -f -t 0
 		}
 	}
 }
