@@ -1,5 +1,5 @@
-Set-Alias win Optimise-Win
-Function Optimise-Win {
+Set-Alias win S-Win
+Function S-Win {
 	chcp 65001
 	#Declarando Variáveis
 	$Temp_menu = $true
