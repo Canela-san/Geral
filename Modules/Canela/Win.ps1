@@ -1,5 +1,9 @@
-# Set-Alias win Start-Win
+Set-Alias util Win
 Set-Alias BS Block-Steam
+
+# Function Win {}
+# Function Block-Steam {}
+
 Function Win {
 	chcp 65001
 	
@@ -391,12 +395,12 @@ Function Block-Steam {
 	)
 	if ($a) {
 		if ($a -in ('Y', 'y')) {	
-			Write-Warning -ForegroundColor Blue "Criando Regra"
+			Write-Warning "Criando Regra"
 			New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
 			New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
 		}
 		elseif ($a -in ('N', 'n')) {
-			Write-Warning -ForegroundColor Blue "Removendo Regra"
+			Write-Warning "Removendo Regra"
 			Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
 			Remove-NetFirewallRule –DisplayName “Steam Block out” | out-null
 		}
@@ -406,7 +410,7 @@ Function Block-Steam {
 	}
 	else {
 		if ((Get-NetFirewallRule | Select-Object DisplayName) | Select-String -Pattern "Steam block" -AllMatches) {		
-			Write-Host "A regra de bloqueio da Steam existe"
+			Write-Warning "A regra de bloqueio da Steam existe"
 			if (!$get) {
 				Write-Warning "Removendo Regra"
 				Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
@@ -414,7 +418,7 @@ Function Block-Steam {
 			}
 		}
 		else {
-			Write-Host "A regra de bloqueio da Steam não existe"
+			Write-Warning "A regra de bloqueio da Steam não existe"
 			if (!$get) {
 				Write-Warning "Criando Regra"
 				New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
