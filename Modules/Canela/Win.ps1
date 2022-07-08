@@ -1,6 +1,8 @@
-Set-Alias win Start-Win
-Function Start-Win {
+# Set-Alias win Start-Win
+Set-Alias Block-Steam BS
+Function Win {
 	chcp 65001
+	
 	#Declarando Variáveis
 	$Temp_menu = $true
 	$quant_menu = 0..7
@@ -17,7 +19,7 @@ Function Start-Win {
 	$Bluetooth = 11
 	$reiniciar = $false
 	$date = Get-Date
-
+	
 	#Testando Privilégios Administrativos
 	if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544"))) {
 		Clear-Host
@@ -331,7 +333,7 @@ Function Start-Win {
 			{ $PSItem -in $WindowsDefender } {
 				if (!($TypeDefender -eq 3)) {
 					Clear-Host
-					$CurrentPath = pwd
+					$CurrentPath = Get-Location
 					Set-Location "C:\Program Files\Windows Defender"
 					Get-ChildItem
 					Clear-Host
@@ -377,4 +379,41 @@ Function Start-Win {
 			Shutdown -s -f -t 0
 		}
 	}
+
 }
+
+Function Block-Steam {
+	[CmdletBinding()]
+	Param (
+		[ValidateSet('Y', 'y', 'N', 'n')]
+		[string] $a,
+		[switch] $get
+	)
+	if ($a) {
+		if ($a -in ('Y', 'y')) {	
+			New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block
+			New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block
+		}
+		elseif ($a -in ('N', 'n')) {
+
+		}
+		else {
+			Write-Error "Erro de execução, entradas permitidas para -a são [Y, y, N, n]"
+		}
+	}
+	else {
+		if ((Get-NetFirewallRule | Select-Object DisplayName) | Select-String -Pattern "Steam block" -AllMatches) {		
+			Write-Verbose "A regra de bloqueio da Steam existe"
+			Write-Verbose "Removendo Regra"
+			Remove-NetFirewallRule –DisplayName “Steam Block in”
+			Remove-NetFirewallRule –DisplayName “Steam Block out”
+		}
+		else {
+			Write-Verbose "A regra de bloqueio da Steam não existe"
+			Write-Verbose "Criando Regra"
+			New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block
+			New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block	
+		}
+	}
+}
+

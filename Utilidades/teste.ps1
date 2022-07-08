@@ -9,5 +9,7 @@ else
 	Install-module -Force -AcceptLicense -name PSWindowsUpdate
 }
 #>
-$CurrentPath = (Get-Location).path
-$CurrentPath.LastIndexOf('/');
+# $CurrentPath = (Get-Location).path
+# $CurrentPath.LastIndexOf('/');
+$text = (Get-NetFirewallRule | Select-Object DisplayName, Enabled, Direction).string
+Write-Host($text)
