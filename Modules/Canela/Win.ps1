@@ -1,5 +1,5 @@
 Set-Alias util Win
-Set-Alias BS Block-Steam
+# Set-Alias BS Block-Steam
 
 # Function Win {}
 # Function Block-Steam {}
@@ -386,45 +386,122 @@ Function Win {
 
 }
 
-Function Block-Steam {
-	[CmdletBinding()]
-	Param (
-		[ValidateSet('Y', 'y', 'N', 'n')]
-		[string] $a,
-		[switch] $get
-	)
-	if ($a) {
-		if ($a -in ('Y', 'y')) {	
-			Write-Warning "Criando Regra"
-			New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
-			New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
-		}
-		elseif ($a -in ('N', 'n')) {
-			Write-Warning "Removendo Regra"
-			Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
-			Remove-NetFirewallRule –DisplayName “Steam Block out” | out-null
-		}
-		else {
-			Write-Error "Erro de execução, entradas permitidas para -a são [Y, y, N, n]"
-		}
-	}
-	else {
-		if ((Get-NetFirewallRule | Select-Object DisplayName) | Select-String -Pattern "Steam block" -AllMatches) {		
-			Write-Warning "A regra de bloqueio da Steam existe"
-			if (!$get) {
-				Write-Warning "Removendo Regra"
-				Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
-				Remove-NetFirewallRule –DisplayName “Steam Block out” | out-null
-			}
-		}
-		else {
-			Write-Warning "A regra de bloqueio da Steam não existe"
-			if (!$get) {
-				Write-Warning "Criando Regra"
-				New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
-				New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
-			}
-		}
-	}
-}
+# ----------------------------- OUTDATED
+# Function Block-Steam {
+# 	[CmdletBinding()]
+# 	Param (
+# 		[ValidateSet('Y', 'y', 'N', 'n')]
+# 		[string] $a,
+# 		[switch] $get
+# 	)
+# 	if ($a) {
+# 		if ($a -in ('Y', 'y')) {	
+# 			Write-Warning "Criando Regra"
+
+# 			New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 			New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+		
+# 		}
+# 		elseif ($a -in ('N', 'n')) {
+# 			Write-Warning "Removendo Regra"
+# 			Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
+# 			Remove-NetFirewallRule –DisplayName “Steam Block out” | out-null
+# 		}
+# 		else {
+# 			Write-Error "Erro de execução, entradas permitidas para -a são [Y, y, N, n]"
+# 		}
+# 	}
+# 	else {
+# 		if ((Get-NetFirewallRule | Select-Object DisplayName) | Select-String -Pattern "Steam block" -AllMatches) {		
+# 			Write-Warning "A regra de bloqueio da Steam existe"
+# 			if (!$get) {
+# 				Write-Warning "Removendo Regra"
+# 				Remove-NetFirewallRule –DisplayName “Steam Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam Block out” | out-null
+# 			}
+# 		}
+# 		else {
+# 			Write-Warning "A regra de bloqueio da Steam não existe"
+# 			if (!$get) {
+# 				Write-Warning "Criando Regra"
+# 				New-NetFirewallRule -DisplayName "Steam Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 			}
+# 		}
+# 	}
+# }
+
+# Function Block-Steam {
+# 	[CmdletBinding()]
+# 	Param (
+# 		[ValidateSet('Y', 'y', 'N', 'n')]
+# 		[string] $a,
+# 		[switch] $get
+# 	)
+# 	$test = [bool]((Get-NetFirewallRule | Select-Object DisplayName) | Select-String -Pattern "Steam--" -AllMatches)
+# 	if ($a -notin ('y', 'Y')) {		
+# 		if ($test) {
+# 			Write-Warning "A regra de bloqueio da Steam existe"
+# 			if (!$get) {
+# 				Write-Warning "Removendo Regra"
+# 				Enable-NetFirewallRule -DisplayName "Steam"
+# 				Enable-NetFirewallRule -DisplayName "Steam Web Helper"
+
+# 				Remove-NetFirewallRule –DisplayName “Steam--1 Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam--1 Block out” | out-null
+			
+# 				Remove-NetFirewallRule –DisplayName “Steam--2 Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam--2 Block out” | out-null
+			
+# 				Remove-NetFirewallRule –DisplayName “Steam--3 Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam--3 Block out” | out-null
+			
+# 				Remove-NetFirewallRule –DisplayName “Steam--4 Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam--4 Block out” | out-null
+			
+# 				Remove-NetFirewallRule –DisplayName “Steam--5 Block in” | out-null
+# 				Remove-NetFirewallRule –DisplayName “Steam--5 Block out” | out-null
+# 			}
+# 		}
+# 		elseif ($a) {
+# 			if (!$get) {
+# 				Write-Warning "A regra de bloqueio da Steam já não existe"
+# 				Write-Warning "Nada executado"
+# 			}
+# 		}
+# 	}
+# 	if ($a -notin ('n', 'N')) {
+# 		if (!$test) {
+# 			Write-Warning "A regra de bloqueio da Steam não existe"
+# 			if (!$get) {
+# 				Write-Warning "Criando Regra"
+
+# 				Disable-NetFirewallRule -DisplayName "Steam"
+# 				Disable-NetFirewallRule -DisplayName "Steam Web Helper"
+
+# 				New-NetFirewallRule -DisplayName "Steam--1 Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam--1 Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\steam.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+			
+# 				New-NetFirewallRule -DisplayName "Steam--2 Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\streaming_client.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam--2 Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\streaming_client.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+			
+# 				New-NetFirewallRule -DisplayName "Steam--3 Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\GameOverlayUI.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam--3 Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\GameOverlayUI.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+			
+# 				New-NetFirewallRule -DisplayName "Steam--4 Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam\bin\cef\cef.win7x64\steamwebhelper.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam--4 Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam\bin\cef\cef.win7x64\steamwebhelper.exe" -RemoteAddress LocalSubnet -Action Block | out-null
+			
+# 				New-NetFirewallRule -DisplayName "Steam--5 Block in" -Direction inbound -Program "C:\Program Files (x86)\Steam" -RemoteAddress LocalSubnet -Action Block | out-null
+# 				New-NetFirewallRule -DisplayName "Steam--5 Block out" -Direction Outbound -Program "C:\Program Files (x86)\Steam" -RemoteAddress LocalSubnet -Action Block | out-null
+# 			}
+# 		}
+# 		elseif ($a) {
+# 			if (!$get) {
+# 				Write-Warning "A regra de bloqueio da Steam já existe"
+# 				Write-Warning "Nada executado"
+# 			}
+# 		}
+# 	}
+# }
+
 
