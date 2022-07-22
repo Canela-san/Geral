@@ -30,8 +30,22 @@ function JAO {
     
         #Executaveis 
         Switch ($menu) {
-            condition {
-                $TRUE Write-Host '123'
+            # 
+            { $PSItem -eq $Disk } {
+                Get-PSDrive | Select-String “FileSystem”
+				pause
+            }
+            { !$PSItem } {
+                Write-Host '123'
+            }
+            { $TRUE } {
+                Write-Host '123'
+            }
+            { $TRUE } {
+                Write-Host '123'
+            }
+            { $TRUE } {
+                Write-Host '123'
             }
             Default {}
         }
