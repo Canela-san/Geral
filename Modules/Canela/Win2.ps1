@@ -1,4 +1,33 @@
 
+<#
+.SYNOPSIS
+    Do optimisation on the computer. there's several actions to be chosen.
+.DESCRIPTION
+    Console-oriented configurantions and repair of windows 10.
+.EXAMPLE
+    Win
+    Invoke the main menu.
+.EXAMPLE
+    Win 1
+    Begin the desfragmentation process without showing the menu.
+.EXAMPLE
+    Get-Weather -City 'London' -Units Metric -Language 'en'
+    Returns full weather information for the city of London in Metric units with UK language.
+.EXAMPLE
+    Get-Weather -City 'San Antonio' -Units USCS -Short
+    Returns basic weather information for the city of San Antonio in United State customary units.
+.PARAMETER City
+    The city you would like to get the weather from. If not specified the city of your IP is used.
+.PARAMETER Units
+    Units to display Metric vs United States customary units
+.PARAMETER Language
+    Language to display results in
+.PARAMETER Short
+    Will return only basic weather information
+.NOTES
+    https://github.com/chubin/wttr.in
+    https://wttr.in/:help
+#>
 function JAO {
     [CmdletBinding()]
     param (
@@ -8,14 +37,42 @@ function JAO {
             Mandatory = $false
         )]
         [int[]]
-        $menu
+        $type,
+
+        [Parameter(
+            position = 1,    
+            valueFromPipeline = $false,
+            Mandatory = $false
+        )]
+        [switch]
+        $Log = $false
     )
-    
+
     begin {
-        # Verificando se houve entradas em menu
-        if (!$menu) {
-            $menu = $FALSE
+
+        #Declarando Variáveis
+        $Temp_menu = $true
+        $quant_menu = 0..7
+        $defrag = 1, 2
+        $WinUpdate = 3
+        $integridade1 = 1, 4
+        $integridade2 = 1, 5
+        $WindowsDefender = 1, 6
+        $chkdsk = 7
+        $Disk = 99
+        $PlanoDeEnergia = 8
+        $DrivesWeb = 9
+        $Sysinfo = 10
+        $Bluetooth = 11
+        $reiniciar = $false
+        $date = Get-Date
+
+        # Verificando se houve entradas em type
+        if (!$type) {
+            $type = $FALSE
         }
+
+        # Configurando acentos e caracteres especiais.
         chcp 65001
         Clear-Host
         Write-Verbose "Executando em modo verbose. `n"
@@ -38,9 +95,9 @@ function JAO {
             exit
         }
 
-        # Invocando o menu se não houveram entradas no parametro $menu
+        # Invocando o menu se não houveram entradas no parametro $type
         
-        if (!$menu) {
+        if (!$type) {
             #Menu
             while ($Temp_menu) {
                 Clear-Host
@@ -64,18 +121,26 @@ function JAO {
                 write-host " "
                 write-host " ----------------------------------------------------------`n"
 
-                $menu = Read-Host -Prompt '-> '
+                $type = Read-Host -Prompt '-> '
+                
+                if ($type -in $quant_menu) { $Temp_menu = $false }
             }
-
+            # $log = $true para salvar na area de trabalho 
         }
+        else { $Temp_menu = $false }
+    
     }
     
     process {
-        Executaveis 
-        Switch ($menu) {
-            # 
+        $Log_ = $true
+
+        # Executaveis 
+        Switch ($type) {
+
+            # Caso o item seja 0, a função terminará 
             { !$PSItem } {
-                Write-Host '123'
+                Write-Host "O programa será encerrado por escolha do usuário"
+                break
             }
             { $PSItem -eq $Disk } {
                 Get-PSDrive | Select-String “FileSystem”
@@ -90,7 +155,10 @@ function JAO {
             { $TRUE } {
                 Write-Host '123'
             }
-            Default {}
+            Default {
+                Write-Warning "A opção selecionada é inválida."
+                Write-Warning "O programa será encerrado"
+            }
         }
         
     }
