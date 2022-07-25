@@ -45,7 +45,32 @@ function JAO {
             Mandatory = $false
         )]
         [switch]
-        $Log = $false
+        $Log = $false,
+        
+        [Parameter(
+            position = 2,    
+            valueFromPipeline = $false,
+            Mandatory = $false
+        )]
+        [switch]
+        $r = $false, #Reiniciar
+    
+        [Parameter(
+            position = 3,    
+            valueFromPipeline = $false,
+            Mandatory = $false
+        )]
+        [switch]
+        $d = $false, #Desligar
+    
+        [Parameter(
+            position = 4,    
+            valueFromPipeline = $false,
+            Mandatory = $false    
+        )]
+        [ValidateSet(0, 1, 2)]
+        [int]
+        $TypeDefrag = 0 #
     )
 
     begin {
@@ -64,8 +89,8 @@ function JAO {
         $DrivesWeb = 9
         $Sysinfo = 10
         $Bluetooth = 11
-        $reiniciar = $false
         $date = Get-Date
+        $Log_ = $
 
         # Verificando se houve entradas em type
         if (!$type) {
@@ -124,16 +149,54 @@ function JAO {
                 $type = Read-Host -Prompt '-> '
                 
                 if ($type -in $quant_menu) { $Temp_menu = $false }
+            } 
+
+            # Verificar se dispositivo é HD ou SSD 
+            if ((!$TypeDefrag) -AND (($Type -in $defrag) -or ($Type -in $chkdsk))) {
+                $Temp_menu = $true
+                while ($temp_menu) {
+                    Clear-Host
+                    write-host "`n`nO diretório C: é um HD ou SSD?"
+                    write-host " [1] HD (Hard Disk)"
+                    write-host " [2] SSD`n"
+                    write-host " [0] Cancelar"
+					
+                    $TypeDefrag = Read-Host -Prompt '-> '
+								
+                    if ($TypeDefrag -in 0..2) {
+                        $Temp_menu = $false
+                    }
+                }
             }
+
+            # Selecionar o tipo de varificação anti-virus
+            if ((!$TypeDefender) -AND (($Type -in $WindowsDefender))) {
+				$Temp_menu = $true
+				while ($Temp_menu) {
+					Clear-Host
+					write-host "`n`nQue tipo de verificação contra vírus você deseja?"
+					write-host " [1] Verificação Rápida"
+					write-host " [2] Verificação Completa`n"
+					write-host " [3] Não verificar"
+					write-host " [0] Cancelar"
+					$TypeDefender = Read-Host -Prompt '-> '
+					if ($TypeDefender -in 1, 2, 3) {
+						$Temp_menu = $false
+					}
+					elseif ($TypeDefender -eq 0) {
+						$Temp_menu = $false
+					}
+				}
+			} 
             # $log = $true para salvar na area de trabalho 
+            
         }
         else { $Temp_menu = $false }
     
     }
     
     process {
-        $Log_ = $true
-
+        if ($log_) {}
         # Executaveis 
         Switch ($type) {
 
