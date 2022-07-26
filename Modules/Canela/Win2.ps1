@@ -73,13 +73,22 @@ function JAO {
         $TypeDefrag = 0, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
         
         [Parameter(
+            position = 4,    
+            valueFromPipeline = $false,
+            Mandatory = $false    
+        )]
+        [ValidateSet(0, 1, 2)]
+        [int]
+        $TypeDefender = 0, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
+        
+        [Parameter(
             position = 5,    
             valueFromPipeline = $false,
             Mandatory = $false
         )]
         [int]
         $t = 0 #Tempo de espera antes de inciar as operações
-        )
+    )
 
     begin {
 
@@ -128,7 +137,6 @@ function JAO {
         }
 
         # Invocando o menu se não houveram entradas no parametro $type
-        
         if (!$type) {
             #Menu
             while ($Temp_menu) {
@@ -174,9 +182,7 @@ function JAO {
                         write-host " [1] HD (Hard Disk)"
                         write-host " [2] SSD`n"
                         write-host " [0] Cancelar"
-					
                         $TypeDefrag = Read-Host -Prompt '-> '
-								
                         if ($TypeDefrag -in @(0..2)) {
                             $Temp_menu = $false
                         }
@@ -190,20 +196,20 @@ function JAO {
                         write-host "`n`nQue tipo de verificação contra vírus você deseja?"
                         write-host " [1] Verificação Rápida"
                         write-host " [2] Verificação Completa`n"
-                        write-host " [3] Não verificar"
-                        write-host " [0] Cancelar"
+                        write-host "`n [0] Não verificar"
                         $TypeDefender = Read-Host -Prompt '-> '
-                        if ($TypeDefender -in @(0..3)) {
+                        if ($TypeDefender -in @(0..2)) {
                             $Temp_menu = $false
                         }
                     }
                 }
+
                 # $log = $true para salvar na area de trabalho 
-                {} {
+                { $true } {
                     
                 }
 
-                {} {
+                { $true } {
                     
                 }
 
@@ -215,7 +221,7 @@ function JAO {
     }
     
     process {
-        if ($t){timeout /t $t /nobreak}
+        if ($t) { timeout /t $t /nobreak }
         if ($log_) {}
         # Executaveis 
         Switch ($type) {
@@ -223,7 +229,7 @@ function JAO {
             # Caso o item seja 0, a função terminará 
             { !$PSItem } {
                 Write-Host "O programa será encerrado por escolha do usuário"
-                break
+                return;
             }
             { $PSItem -eq $Disk } {
                 Get-PSDrive | Select-String “FileSystem”
