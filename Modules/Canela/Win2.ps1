@@ -61,7 +61,7 @@ function JAO {
             Mandatory = $false
         )]
         [switch]
-        $d = $false, #Desligar
+        $s = $false, #Desligar
     
         [Parameter(
             position = 4,    
@@ -70,19 +70,27 @@ function JAO {
         )]
         [ValidateSet(0, 1, 2)]
         [int]
-        $TypeDefrag = 0 #
-    )
+        $TypeDefrag = 0, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
+        
+        [Parameter(
+            position = 5,    
+            valueFromPipeline = $false,
+            Mandatory = $false
+        )]
+        [int]
+        $t = 0 #Tempo de espera antes de inciar as operações
+        )
 
     begin {
 
         #Declarando Variáveis
         $Temp_menu = $true
-        $quant_menu = 0..7
-        $defrag = 1, 2
+        $quant_menu = @(0..7)
+        $defrag = @(1, 2)
         $WinUpdate = 3
-        $integridade1 = 1, 4
-        $integridade2 = 1, 5
-        $WindowsDefender = 1, 6
+        $integridade1 = @(1, 4)
+        $integridade2 = @(1, 5)
+        $WindowsDefender = @(1, 6)
         $chkdsk = 7
         $Disk = 99
         $PlanoDeEnergia = 8
@@ -90,7 +98,6 @@ function JAO {
         $Sysinfo = 10
         $Bluetooth = 11
         $date = Get-Date
-        $Log_ = $
 
         # Verificando se houve entradas em type
         if (!$type) {
@@ -110,7 +117,7 @@ function JAO {
                 Write-Warning "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
                 Write-Warning "`n`n-----------------------------------------------------------------------------"
                 timeout /t -1
-                exit
+                return;
             }
         }
         catch {
@@ -151,51 +158,64 @@ function JAO {
                 if ($type -in $quant_menu) { $Temp_menu = $false }
             } 
 
-            # Verificar se dispositivo é HD ou SSD 
-            if ((!$TypeDefrag) -AND (($Type -in $defrag) -or ($Type -in $chkdsk))) {
-                $Temp_menu = $true
-                while ($temp_menu) {
-                    Clear-Host
-                    write-host "`n`nO diretório C: é um HD ou SSD?"
-                    write-host " [1] HD (Hard Disk)"
-                    write-host " [2] SSD`n"
-                    write-host " [0] Cancelar"
+            # Coletandos dados necessários
+            switch ($Type) {
+                # Caso o valor escolhido seja 0, o programa terminará.
+                { !$PSItem } {
+                    Write-Host "O programa será encerrado por escolha do usuário"
+                    return;
+                }
+                # Verificar se dispositivo é HD ou SSD 
+                { (!$TypeDefrag) -AND ($PSItem -in $defrag + $chkdsk) } {
+                    $Temp_menu = $true
+                    while ($temp_menu) {
+                        Clear-Host
+                        write-host "`n`nO diretório C: é um HD ou SSD?"
+                        write-host " [1] HD (Hard Disk)"
+                        write-host " [2] SSD`n"
+                        write-host " [0] Cancelar"
 					
-                    $TypeDefrag = Read-Host -Prompt '-> '
+                        $TypeDefrag = Read-Host -Prompt '-> '
 								
-                    if ($TypeDefrag -in 0..2) {
-                        $Temp_menu = $false
+                        if ($TypeDefrag -in @(0..2)) {
+                            $Temp_menu = $false
+                        }
                     }
                 }
-            }
+                # Selecionar o tipo de varificação anti-virus
+                { (!$TypeDefender) -AND ($PSItem -in $WindowsDefender) } {
+                    $Temp_menu = $true
+                    while ($Temp_menu) {
+                        Clear-Host
+                        write-host "`n`nQue tipo de verificação contra vírus você deseja?"
+                        write-host " [1] Verificação Rápida"
+                        write-host " [2] Verificação Completa`n"
+                        write-host " [3] Não verificar"
+                        write-host " [0] Cancelar"
+                        $TypeDefender = Read-Host -Prompt '-> '
+                        if ($TypeDefender -in @(0..3)) {
+                            $Temp_menu = $false
+                        }
+                    }
+                }
+                # $log = $true para salvar na area de trabalho 
+                {} {
+                    
+                }
 
-            # Selecionar o tipo de varificação anti-virus
-            if ((!$TypeDefender) -AND (($Type -in $WindowsDefender))) {
-				$Temp_menu = $true
-				while ($Temp_menu) {
-					Clear-Host
-					write-host "`n`nQue tipo de verificação contra vírus você deseja?"
-					write-host " [1] Verificação Rápida"
-					write-host " [2] Verificação Completa`n"
-					write-host " [3] Não verificar"
-					write-host " [0] Cancelar"
-					$TypeDefender = Read-Host -Prompt '-> '
-					if ($TypeDefender -in 1, 2, 3) {
-						$Temp_menu = $false
-					}
-					elseif ($TypeDefender -eq 0) {
-						$Temp_menu = $false
-					}
-				}
-			} 
-            # $log = $true para salvar na area de trabalho 
-            
+                {} {
+                    
+                }
+
+                Default {}
+            }
         }
         else { $Temp_menu = $false }
     
     }
     
     process {
+        if ($t){timeout /t $t /nobreak}
         if ($log_) {}
         # Executaveis 
         Switch ($type) {

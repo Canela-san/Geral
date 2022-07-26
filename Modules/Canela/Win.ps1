@@ -32,7 +32,7 @@ Function Win {
 		Write-Host "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
 		Write-host "`n`n-----------------------------------------------------------------------------"
 		timeout /t -1
-		exit
+		return;
 	}
 
 	#Menu
@@ -70,7 +70,8 @@ Function Win {
 			0 {
 				#Sair
 				Clear-Host
-				exit
+				# exit
+				return;
 			}
 
 			{ $PSItem -eq $PlanoDeEnergia } {
@@ -383,7 +384,7 @@ Function Win {
 			Shutdown -s -f -t 0
 		}
 	}
-
+return;
 }
 
 # ----------------------------- OUTDATED
