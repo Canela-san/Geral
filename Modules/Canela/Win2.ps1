@@ -73,7 +73,7 @@ function JAO {
         $TypeDefrag = 0, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
         
         [Parameter(
-            position = 4,    
+            position = 5,    
             valueFromPipeline = $false,
             Mandatory = $false    
         )]
@@ -82,7 +82,7 @@ function JAO {
         $TypeDefender = 0, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
         
         [Parameter(
-            position = 5,    
+            position = 6,    
             valueFromPipeline = $false,
             Mandatory = $false
         )]
@@ -93,8 +93,6 @@ function JAO {
     begin {
 
         #Declarando Variáveis
-        $Temp_menu = $true
-        $quant_menu = @(0..7)
         $defrag = @(1, 2)
         $WinUpdate = 3
         $integridade1 = @(1, 4)
@@ -106,12 +104,6 @@ function JAO {
         $DrivesWeb = 9
         $Sysinfo = 10
         $Bluetooth = 11
-        $date = Get-Date
-
-        # Verificando se houve entradas em type
-        if (!$type) {
-            $type = $FALSE
-        }
 
         # Configurando acentos e caracteres especiais.
         chcp 65001
@@ -130,7 +122,7 @@ function JAO {
             }
         }
         catch {
-            Write-Error "Não foi possível verificar os acessos administrativos, resultando do seguinte erro:"
+            Write-Error "Não foi possível verificar os acessos administrativos, resultando no seguinte erro:"
             $_
             timeout /t -1
             exit
@@ -139,22 +131,24 @@ function JAO {
         # Invocando o menu se não houveram entradas no parametro $type
         if (!$type) {
             #Menu
+            $Temp_menu = $true
             while ($Temp_menu) {
                 Clear-Host
-                write-host $date
+                write-host ""
+                Get-Date
                 write-host "`n"
                 write-host " -------------------------- MENU --------------------------"
                 write-host " "
-                write-host "  [00] - Sair`n"
+                write-host "  [-1] - Sair`n"
                 write-host "  [01] - All (2,3,4,5,6)"
                 write-host "  [02] - Desfragmentar"
-                write-host "  [03] - Limpar Cache Windows Update"
-                write-host "  [04] - Corrigir integridade da imagem do windows"
-                write-host "  [05] - Corrigir integridade dos arquivos do Windows"
-                write-host "  [06] - Verificação de vírus"
-                write-host ""
-                write-host "  [07] - Verificar e corrigir defeitos de disco"
-                write-host "  [08] - Adicionar Plano de Energia (Desempenho Maximo)"
+                Write-Host "  [03] - Limpar Cache Windows Update"
+                Write-Host "  [04] - Corrigir integridade da imagem do windows"
+                Write-Host "  [05] - Corrigir integridade dos arquivos do Windows"
+                Write-Host "  [06] - Verificação de vírus"
+                Write-Host ""
+                Write-Host "  [07] - Verificar e corrigir defeitos de disco"
+                Write-Host "  [08] - Adicionar Plano de Energia (Desempenho Maximo)"
                 write-host "  [09] - Abrir páginas WEB para atualizar Drives"
                 write-host "  [10] - Verificar informações do sistema"
                 write-host "  [11] - Recarregar módulos bluetooth"
@@ -162,17 +156,18 @@ function JAO {
                 write-host " ----------------------------------------------------------`n"
 
                 $type = Read-Host -Prompt '-> '
-                
-                if ($type -in $quant_menu) { $Temp_menu = $false }
+                switch ($type) {
+                    0 { break }
+                    { $PSItem -eq -1 } { return }
+                    { $PSItem -in @(1..11) } { $Temp_menu = $false }
+                }
             } 
 
             # Coletandos dados necessários
-            switch ($Type) {
+            switch ($type) {
                 # Caso o valor escolhido seja 0, o programa terminará.
-                { !$PSItem } {
-                    Write-Host "O programa será encerrado por escolha do usuário"
-                    return;
-                }
+                { $PSItem -eq -1 } { return }
+                
                 # Verificar se dispositivo é HD ou SSD 
                 { (!$TypeDefrag) -AND ($PSItem -in $defrag + $chkdsk) } {
                     $Temp_menu = $true
@@ -181,10 +176,13 @@ function JAO {
                         write-host "`n`nO diretório C: é um HD ou SSD?"
                         write-host " [1] HD (Hard Disk)"
                         write-host " [2] SSD`n"
-                        write-host " [0] Cancelar"
-                        $TypeDefrag = Read-Host -Prompt '-> '
-                        if ($TypeDefrag -in @(0..2)) {
-                            $Temp_menu = $false
+                        write-host " [-1] Não desfragmentar"
+                        $temp = Read-Host -Prompt '-> '
+                        Switch ($temp) { 
+                            { $temp -in @(-1, 1, 2) } {
+                                $TypeDefender = $temp
+                                $Temp_menu = $false
+                            }
                         }
                     }
                 }
@@ -196,10 +194,13 @@ function JAO {
                         write-host "`n`nQue tipo de verificação contra vírus você deseja?"
                         write-host " [1] Verificação Rápida"
                         write-host " [2] Verificação Completa`n"
-                        write-host "`n [0] Não verificar"
-                        $TypeDefender = Read-Host -Prompt '-> '
-                        if ($TypeDefender -in @(0..2)) {
-                            $Temp_menu = $false
+                        write-host "`n [-1] Não verificar"
+                        $temp = Read-Host -Prompt '-> '
+                        Switch ($temp) { 
+                            { $temp -in @(-1, 1, 2) } {
+                                $TypeDefender = $temp
+                                $Temp_menu = $false
+                            }
                         }
                     }
                 }
@@ -222,19 +223,15 @@ function JAO {
     
     process {
         if ($t) { timeout /t $t /nobreak }
-        if ($log_) {}
+        if ($log) { $log = 123 }
         # Executaveis 
         Switch ($type) {
 
             # Caso o item seja 0, a função terminará 
-            { !$PSItem } {
-                Write-Host "O programa será encerrado por escolha do usuário"
-                return;
-            }
-            { $PSItem -eq $Disk } {
-                Get-PSDrive | Select-String “FileSystem”
-                pause
-            }
+            0 { return }
+            { $PSItem -eq -1 } { return }
+            { $PSItem -eq $Disk } { Get-PSDrive | Select-String “FileSystem” ; timeout /t -1 }
+
             { $TRUE } {
                 Write-Host '123'
             }
@@ -253,6 +250,11 @@ function JAO {
     }
 
     end {
-
+        Clear-Host
+        Write-Host 'O processamento foi finalizado'
+        Write-Host 'Log de execução:'
+        $log_
     }
 }
+
+jao
