@@ -205,7 +205,6 @@ function JAO {
                     }
                 }
                 
-
                 # $log = $true para salvar na area de trabalho 
                 { $true } {
                     
