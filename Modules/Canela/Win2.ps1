@@ -231,7 +231,20 @@ function JAO {
             0 { return }
             { $PSItem -eq -1 } { return }
             { $PSItem -eq $Disk } { Get-PSDrive | Select-String “FileSystem” ; timeout /t -1 }
-
+            { $PSItem -eq $Sysinfo } { Clear-Host ; Systeminfo ; timeout /t -1 }
+            { $PSItem -eq $PlanoDeEnergia } { Clear-Host ; write-host "`n" ; powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 ; timeout /t -1 }
+            { $PSItem -eq $DrivesWeb } {
+				Clear-Host
+				write-host "`nAbrindo Abas Web:"
+				write-host "  - Drive Boost"
+				write-host "  - Chaves para Drive Boost"
+				write-host "  - Nvidia GeForce Experience"
+				Start-Process "https://www.iobit.com/pt/driver-booster.php"
+				Start-Process "https://www.gustavortech.com/2020/04/iobit-driver-booster.html"
+				Start-Process "https://www.nvidia.com/pt-br/geforce/geforce-experience/"
+				timeout /t -1
+			}
+            
             { $TRUE } {
                 Write-Host '123'
             }
