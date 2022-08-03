@@ -28,7 +28,7 @@
     https://github.com/chubin/wttr.in
     https://wttr.in/:help
 #>
-function JAO {
+function Win {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -94,7 +94,7 @@ function JAO {
 
         #Declarando Variáveis
         $defrag = @(1, 2)
-        $WinUpdate = 3
+        # $WinUpdate = 3
         $integridade1 = @(1, 4)
         $integridade2 = @(1, 5)
         $WindowsDefender = @(1, 6)
@@ -207,15 +207,8 @@ function JAO {
                 }
 
                 # $log = $true para salvar na area de trabalho 
-                { $true } {
-                    
-                }
-
-                { $true } {
-                    
-                }
-
                 Default {}
+
             }
         }
         else { $Temp_menu = $false }
@@ -235,11 +228,11 @@ function JAO {
             { $PSItem -eq $Sysinfo } { Clear-Host ; Systeminfo ; timeout /t -1 }
             { $PSItem -eq $PlanoDeEnergia } { Clear-Host ; write-host "`n" ; powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 ; timeout /t -1 }
             { $PSItem -eq $Bluetooth } {
-				Restart-Service -Force bthserv
-				Restart-Service -Force BTAGService
-				Restart-Service -Force DevicesFlowUserSvc_a521d
-				timeout /t 5 /nobreak
-			}
+                Restart-Service -Force bthserv
+                Restart-Service -Force BTAGService
+                Restart-Service -Force DevicesFlowUserSvc_a521d
+                timeout /t 5 /nobreak
+            }
             { $PSItem -eq $DrivesWeb } {
                 Clear-Host
                 write-host "`nAbrindo Abas Web:"
@@ -354,4 +347,3 @@ function JAO {
     }
 }
 
-jao
