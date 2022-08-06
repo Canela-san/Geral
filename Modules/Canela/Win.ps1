@@ -128,7 +128,6 @@ function Win {
             timeout /t -1
             exit
         }
-
         # Invocando o menu se não houveram entradas no parametro $type
         if (!$type) {
             #Menu
@@ -194,7 +193,7 @@ function Win {
                         Clear-Host
                         write-host "`n`nQue tipo de verificação contra vírus você deseja?"
                         write-host " [1] Verificação Rápida"
-                        write-host " [2] Verificação Completa`n"
+                        write-host " [2] Verificação Completa"
                         write-host "`n [-1] Não verificar"
                         $temp = Read-Host -Prompt '-> '
                         Switch ($temp) { 
@@ -205,14 +204,38 @@ function Win {
                         }
                     }
                 }
+            }
+            
 
-                # $log = $true para salvar na area de trabalho 
-                Default {}
 
+            # menu para verificar reinicialização após execução
+            $Temp_menu = $true
+            while ($Temp_menu) {
+                Clear-Host
+                write-host "`n`nDeseja que o computador seja desligado ou reiniciado após a execução?"
+                write-host " [S] Desligar"
+                write-host " [R] Reiniciar"
+                write-host "`n [-1] Não desligar nem reiniciar"
+                $temp = Read-Host -Prompt '-> '
+                switch ($temp) {
+                    { $PSItem -eq -1 } {
+                        $r = $false
+                        $s = $false
+                        $Temp_menu = $false
+                    }
+                    { $PSItem -in @("S", "s") } {
+                        $r = $false
+                        $s = $true
+                        $Temp_menu = $false
+                    }
+                    { $PSItem -in @("R", "r") } {
+                        $r = $true
+                        $s = $false
+                        $Temp_menu = $false
+                    }
+                }
             }
         }
-        else { $Temp_menu = $false }
-    
     }
     
     process {
@@ -346,7 +369,7 @@ function Win {
             timeout /t 15 /nobreak
             Shutdown -s -f -t 0
         }
-        # Clear-Host
+        Clear-Host
         Write-Host 'O processamento foi finalizado'
         Write-Host 'Log de execução:'
         $log_
