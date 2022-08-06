@@ -250,8 +250,10 @@ function Win {
                     Clear-Host
                     write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
                     write-host " processando...`n"
+                    $log_ = $log_ + "`nDesfragmentação Iniciada"
                     defrag C: -W -F
                     write-host "`n Desfragmentação concluida!"
+                    $log_ = $log_ + "`nDesfragmentação Finalizada`n"
                 }
                 else {
                     Clear-Host
@@ -264,6 +266,7 @@ function Win {
             }
             #Integridade1
             { $PSItem -in $integridade1 } {
+                $log_ = $log_ + "`nIntegridade 1 Iniciada"
                 Clear-Host
                 write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
                 write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
@@ -274,16 +277,19 @@ function Win {
                 DISM /Online /Cleanup-image /StartComponentCleanup
                 write-host " .............`n"
                 write-host " (Passo 1) - finalizado"
+                $log_ = $log_ + "`nIntegridade 1 Finalizada`n"
                 timeout /t 5 /nobreak
             }
             #Integridade2
             { $PSItem -in $integridade2 } {
+                $log_ = $log_ + "`nIntegridade 2 Iniciada"
                 Clear-Host
                 write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
                 write-host " processando..."
                 SFC /SCANNOW
                 write-host " .............`n"
                 write-host " (Passo 2) - finalizado"
+                $log_ = $log_ + "`nIntegridade 2 Finalizada`n"
                 timeout /t 5 /nobreak
             }
             #WindowsDefender
@@ -328,13 +334,13 @@ function Win {
 
     end {
         #Reiniciar
-        if ($Reiniciar -eq $true) {
+        if ($r) {
             Clear-Host
             write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
             timeout /t 15 /nobreak
             Shutdown -r -f -t 0
         }
-        elseif ($Reiniciar -eq "Desligar") {	      
+        elseif ($s) {	      
             Clear-Host
             write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
             timeout /t 15 /nobreak
