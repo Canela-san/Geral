@@ -70,7 +70,7 @@ function Win {
         )]
         [ValidateSet(-1, 1, 2)]
         [int]
-        $TypeDefrag = 0, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
+        $TypeDefrag = 1, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
         
         [Parameter(
             position = 5,    
@@ -79,7 +79,7 @@ function Win {
         )]
         [ValidateSet(-1, 1, 2)]
         [int]
-        $TypeDefender = 0, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
+        $TypeDefender = 1, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
         
         [Parameter(
             position = 6,    
