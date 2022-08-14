@@ -11,11 +11,16 @@
     Win 1
     Begin the desfragmentation process without showing the menu.
 .EXAMPLE
-    Get-Weather -City 'London' -Units Metric -Language 'en'
-    Returns full weather information for the city of London in Metric units with UK language.
+    Win 2 -a -log -hd 1
+        2 select the desfragmentation option
+        -a define to the computer not be restarted ou shutdown
+        -log is to save a log on desktop
+        -hd 1 define the computer uses HD, not SSD
 .EXAMPLE
-    Get-Weather -City 'San Antonio' -Units USCS -Short
-    Returns basic weather information for the city of San Antonio in United State customary units.
+    Win 4, 5, 6 -s -verification 1
+        4, 5, 6 select the type of execution, that is integridade 1, integridade 2 and antivirus verification
+        -s define to the computer shutdown after execution
+        -verification 1 defines the type of verification windows defender will do, 1 to fast and 2 for complete
 .PARAMETER City
     The city you would like to get the weather from. If not specified the city of your IP is used.
 .PARAMETER Units
@@ -37,7 +42,7 @@ function Win {
             Mandatory = $false
         )]
         [int[]]
-        $type,
+        $type, #seleção principal, o que o programa executará, valor numérico
 
         [Parameter(
             position = 1,    
@@ -45,7 +50,7 @@ function Win {
             Mandatory = $false
         )]
         [switch]
-        $Log = $false,
+        $Log = $false, #salvar log na área de trabalho
         
         [Parameter(
             position = 2,    
@@ -78,7 +83,7 @@ function Win {
         )]
         [ValidateSet(-1, 1, 2)]
         [int]
-        $HD, #Tipo de hardware, 1 - HD, 2 - SSD, -1 - cancelar
+        $HD, #Tipo de hardware, 1 - HD, 2 - SSD, -1 - não desfragmentar
         
         [Parameter(
             position = 6,    
@@ -87,7 +92,7 @@ function Win {
         )]
         [ValidateSet(-1, 1, 2)]
         [int]
-        $Verification = $false, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
+        $Verification = $false, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, -1 - Não verificar
         
         [Parameter(
             position = 7,    
@@ -249,7 +254,7 @@ function Win {
             }
         }
         $data_i = Get-Date
-        $log_ = "Processando: $type`nTipo de HD: $HD`nVerificação antivírus: $Verification`nReinicialização r, s, a: $r, $s, $a`n"
+        $log_ = "Processando: $type`nTempo de espera adicional: $t`nTipo de HD: $HD`nVerificação antivírus: $Verification`nReinicialização r, s, a: $r, $s, $a`n"
     }
     
     process {
@@ -316,7 +321,7 @@ function Win {
                 DISM /Online /Cleanup-image /StartComponentCleanup
                 write-host " .............`n"
                 write-host " (Passo 1) - finalizado"
-                $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
+                $log_ = $log_ + "Finalizada - (" + [string]((Get-Date) - $temp_date) + ")`n"
                 timeout /t 5 /nobreak
             }
             #Integridade2
@@ -391,6 +396,7 @@ function Win {
         adm = $adm
         log = $log
         data_i = $data_i
+        data_f = " + (Get-Date) + "
         Verification = $Verification
         "
         $log_ = "O processamento foi finalizado`nLog de execução:`n`nTempo total de execução:`n" + [string]((Get-Date) - $data_i) + "`n`n" + $log_
@@ -413,4 +419,3 @@ function Win {
         }
     }
 }
-
