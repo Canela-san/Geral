@@ -62,16 +62,15 @@ function Win {
         )]
         [switch]
         $s = $false, #Desligar
-    
+
         [Parameter(
             position = 4,    
             valueFromPipeline = $false,
-            Mandatory = $false    
+            Mandatory = $false
         )]
-        [ValidateSet(-1, 1, 2)]
-        [int]
-        $TypeDefrag = 1, #Tipo de hardware, 1 - HD, 2 - SSD, 0 - cancelar
-        
+        [switch]
+        $a = $false, # Não Desligar nem reiniciar
+    
         [Parameter(
             position = 5,    
             valueFromPipeline = $false,
@@ -79,10 +78,19 @@ function Win {
         )]
         [ValidateSet(-1, 1, 2)]
         [int]
-        $TypeDefender = 1, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
+        $HD, #Tipo de hardware, 1 - HD, 2 - SSD, -1 - cancelar
         
         [Parameter(
             position = 6,    
+            valueFromPipeline = $false,
+            Mandatory = $false    
+        )]
+        [ValidateSet(-1, 1, 2)]
+        [int]
+        $Verification = $false, #Tipo de verificação anti-virus, 1 - Rápida, 2 - Completa, 0 - Não verificar
+        
+        [Parameter(
+            position = 7,    
             valueFromPipeline = $false,
             Mandatory = $false
         )]
@@ -104,7 +112,8 @@ function Win {
         $DrivesWeb = 9
         $Sysinfo = 10
         $Bluetooth = 11
-
+        $adm = $true
+        $log_ = ""
         # Configurando acentos e caracteres especiais.
         chcp 65001
         Clear-Host
@@ -113,11 +122,13 @@ function Win {
         # Verificando acesso adimistrativo 
         try {
             if (!([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544"))) {
-                Write-Warning "`n-----------------------------------------------------------------------------"
-                Write-Warning "`n`nPrivilégios Insuficientes, execute como administrador"
-                Write-Warning "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos"
-                Write-Warning "`n`n-----------------------------------------------------------------------------"
+                Write-Host ""
+                Write-Warning "-----------------------------------------------------------------------------`n`n"
+                Write-Warning "Privilégios Insuficientes, execute como administrador"
+                Write-Warning "Nenhum tipo de otimização pode ser realizada sem privilégios administrativos`n`n"
+                Write-Warning "-----------------------------------------------------------------------------"
                 $log_ = "* Privilégios Insuficientes, execute como administrador"
+                $adm = $false
                 timeout /t -1
                 return
             }
@@ -126,7 +137,7 @@ function Win {
             Write-Error "Não foi possível verificar os acessos administrativos, resultando no seguinte erro:"
             $_
             timeout /t -1
-            exit
+            return
         }
         # Invocando o menu se não houveram entradas no parametro $type
         if (!$type) {
@@ -162,54 +173,52 @@ function Win {
                     { $PSItem -in @(1..11) } { $Temp_menu = $false }
                 }
             } 
-
-            # Coletandos dados necessários
-            switch ($type) {
-                # Caso o valor escolhido seja 0, o programa terminará.
-                { $PSItem -eq -1 } { return }
-                
-                # Verificar se dispositivo é HD ou SSD 
-                { (!$TypeDefrag) -AND ($PSItem -in $defrag + $chkdsk) } {
-                    $Temp_menu = $true
-                    while ($temp_menu) {
-                        Clear-Host
-                        write-host "`n`nO diretório C: é um HD ou SSD?"
-                        write-host " [1] HD (Hard Disk)"
-                        write-host " [2] SSD`n"
-                        write-host " [-1] Não desfragmentar"
-                        $temp = Read-Host -Prompt '-> '
-                        Switch ($temp) { 
-                            { $temp -in @(-1, 1, 2) } {
-                                $TypeDefrag = $temp
-                                $Temp_menu = $false
-                            }
-                        }
-                    }
-                }
-                # Selecionar o tipo de varificação anti-virus
-                { (!$TypeDefender) -AND ($PSItem -in $WindowsDefender) } {
-                    $Temp_menu = $true
-                    while ($Temp_menu) {
-                        Clear-Host
-                        write-host "`n`nQue tipo de verificação contra vírus você deseja?"
-                        write-host " [1] Verificação Rápida"
-                        write-host " [2] Verificação Completa"
-                        write-host "`n [-1] Não verificar"
-                        $temp = Read-Host -Prompt '-> '
-                        Switch ($temp) { 
-                            { $temp -in @(-1, 1, 2) } {
-                                $TypeDefender = $temp
-                                $Temp_menu = $false
-                            }
+        }
+        # Coletandos dados necessários
+        switch ($type) {
+            # Caso o valor escolhido seja 0, o programa terminará.
+            { $PSItem -eq -1 } { return }
+            
+            # Verificar se dispositivo é HD ou SSD 
+            { (!$HD) -AND ($PSItem -in $defrag + $chkdsk) } {
+                $Temp_menu = $true
+                while ($temp_menu) {
+                    Clear-Host
+                    write-host "`n`nO diretório C: é um HD ou SSD?"
+                    write-host " [1] HD (Hard Disk)"
+                    write-host " [2] SSD`n"
+                    write-host " [-1] Não desfragmentar"
+                    $temp = Read-Host -Prompt '-> '
+                    Switch ($temp) { 
+                        { $temp -in @(-1, 1, 2) } {
+                            $HD = $temp
+                            $Temp_menu = $false
                         }
                     }
                 }
             }
-            
-
-
-            # menu para verificar reinicialização após execução
-            $Temp_menu = $true
+            # Selecionar o tipo de varificação anti-virus
+            { (!$Verification) -AND ($PSItem -in $WindowsDefender) } {
+                $Temp_menu = $true
+                while ($Temp_menu) {
+                    Clear-Host
+                    write-host "`n`nQue tipo de verificação contra vírus você deseja?"
+                    write-host " [1] Verificação Rápida"
+                    write-host " [2] Verificação Completa"
+                    write-host "`n [-1] Não verificar"
+                    $temp = Read-Host -Prompt '-> '
+                    Switch ($temp) { 
+                        { $temp -in @(-1, 1, 2) } {
+                            $Verification = $temp
+                            $Temp_menu = $false
+                        }
+                    }
+                }
+            }
+        }
+        # menu para verificar reinicialização após execução
+        $Temp_menu = $true
+        if (!($r -or $s -or $a)) {
             while ($Temp_menu) {
                 Clear-Host
                 write-host "`n`nDeseja que o computador seja desligado ou reiniciado após a execução?"
@@ -221,26 +230,31 @@ function Win {
                     { $PSItem -eq -1 } {
                         $r = $false
                         $s = $false
+                        $a = $true
                         $Temp_menu = $false
                     }
                     { $PSItem -in @("S", "s") } {
                         $r = $false
                         $s = $true
+                        $a = $false
                         $Temp_menu = $false
                     }
                     { $PSItem -in @("R", "r") } {
                         $r = $true
                         $s = $false
+                        $a = $false
                         $Temp_menu = $false
                     }
                 }
             }
         }
+        $data_i = Get-Date
+        $log_ = "Processando: $type`nTipo de HD: $HD`nVerificação antivírus: $Verification`nReinicialização r, s, a: $r, $s, $a`n"
     }
     
     process {
+        if (!$adm){return}
         if ($t) { timeout /t $t /nobreak }
-        if ($log) { $log = 123 }
         # Executaveis 
         Switch ($type) {
 
@@ -268,15 +282,16 @@ function Win {
                 timeout /t -1
             }
             # Desfragmentar
-            { ($PSItem -in $defrag) -AND !($TypeDefrag -eq -1) } {
-                if ($TypeDefrag -eq 1) {
+            { ($PSItem -in $defrag) -AND !($HD -eq -1) } {
+                if ($HD -eq 1) {
                     Clear-Host
                     write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
                     write-host " processando...`n"
-                    $log_ = $log_ + "`nDesfragmentação Iniciada"
+                    $temp_date = Get-Date
+                    $log_ = $log_ + "`nDesfragmentação Iniciada......."
                     defrag C: -W -F
                     write-host "`n Desfragmentação concluida!"
-                    $log_ = $log_ + "`nDesfragmentação Finalizada`n"
+                    $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                 }
                 else {
                     Clear-Host
@@ -289,7 +304,8 @@ function Win {
             }
             #Integridade1
             { $PSItem -in $integridade1 } {
-                $log_ = $log_ + "`nIntegridade 1 Iniciada"
+                $temp_date = Get-Date
+                $log_ = $log_ + "`nIntegridade 1 Iniciada......."
                 Clear-Host
                 write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
                 write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
@@ -300,39 +316,48 @@ function Win {
                 DISM /Online /Cleanup-image /StartComponentCleanup
                 write-host " .............`n"
                 write-host " (Passo 1) - finalizado"
-                $log_ = $log_ + "`nIntegridade 1 Finalizada`n"
+                $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                 timeout /t 5 /nobreak
             }
             #Integridade2
             { $PSItem -in $integridade2 } {
-                $log_ = $log_ + "`nIntegridade 2 Iniciada"
+                $temp_date = Get-Date
+                $log_ = $log_ + "`nIntegridade 2 Iniciada......."
                 Clear-Host
                 write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
                 write-host " processando..."
                 SFC /SCANNOW
                 write-host " .............`n"
                 write-host " (Passo 2) - finalizado"
-                $log_ = $log_ + "`nIntegridade 2 Finalizada`n"
+                $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                 timeout /t 5 /nobreak
             }
             #WindowsDefender
             { $PSItem -in $WindowsDefender } {
-                if ($TypeDefender -ne -1) {
+                if ($Verification -ne -1) {
+                    $temp_date = Get-Date
                     Clear-Host
+                    $log_ = $log_ + "`nSelecionando versão mais recente do windows defender......."
                     $CurrentPath = Get-Location
                     Set-Location "C:\Program Files\Windows Defender"
                     Get-ChildItem
                     Clear-Host
-                    write-host "`nScan Type: "$TypeDefender"`n"
-
+                    $log_ = $log_ + "Finalizado - (" +[string]((Get-Date) - $temp_date)+ ")`n"
+                    write-host "`nScan Type: "$Verification"`n"
+                    $temp_date = Get-Date
+                    $log_ = $log_ + "`nAtualização de assinatura iniciada......."
                     .\mpcmdrun.exe -SignatureUpdate
-                    .\mpcmdrun.exe -Scan -ScanType $TypeDefender
+                    $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
+                    $temp_date = Get-Date
+                    $log_ = $log_ + "`nVerificação antivirus tipo $Verification iniciada......."
+                    .\mpcmdrun.exe -Scan -ScanType $Verification
+                    $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                     Set-Location $CurrentPath
                 }
             }
             #chkdsk checagem de disco
             { $PSItem -in $chkdsk } {
-                if ($TypeDefrag -eq 1) {
+                if ($HD -eq 1) {
                     Clear-Host
                     write-host "`n`n---- Leia as instruções a baixo ----`n"
                     write-host "--A Checagem de disco é demorada e necessita reiniciar."
@@ -356,7 +381,24 @@ function Win {
     }
 
     end {
+        Clear-Host
+        $log_ = $log_ + "`nValores atribuidos a variáveis seletoras:
+        type = $type
+        HD = $HD
+        r = $r
+        s = $s
+        a = $a
+        adm = $adm
+        log = $log
+        data_i = $data_i
+        Verification = $Verification
+        "
+        $log_ = "O processamento foi finalizado`nLog de execução:`n`nTempo total de execução:`n" + [string]((Get-Date) - $data_i) + "`n`n" + $log_
+        $log_
+        if ($log) { $log_ > C:\Users\Canela\Desktop\LOG.txt }
         #Reiniciar
+        if (!$adm){return}
+        if ($a){return}
         if ($r) {
             Clear-Host
             write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
@@ -365,14 +407,10 @@ function Win {
         }
         elseif ($s) {	      
             Clear-Host
-            write-host "`n`n`n O computador será reiniciado em 15 segundos, feche caso não queira reiniciar.`n"
+            write-host "`n`n`n O computador será desligado em 15 segundos, feche caso não queira desligar.`n"
             timeout /t 15 /nobreak
             Shutdown -s -f -t 0
         }
-        Clear-Host
-        Write-Host 'O processamento foi finalizado'
-        Write-Host 'Log de execução:'
-        $log_
     }
 }
 
