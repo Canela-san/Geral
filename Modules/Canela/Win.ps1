@@ -288,7 +288,7 @@ function Win {
                     write-host "`n`n`n - - - - Desfragmentação do Disco C: - - - -`n"
                     write-host " processando...`n"
                     $temp_date = Get-Date
-                    $log_ = $log_ + "`nDesfragmentação Iniciada......."
+                    $log_ = $log_ + "Desfragmentação Iniciada......."
                     defrag C: -W -F
                     write-host "`n Desfragmentação concluida!"
                     $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
@@ -305,7 +305,7 @@ function Win {
             #Integridade1
             { $PSItem -in $integridade1 } {
                 $temp_date = Get-Date
-                $log_ = $log_ + "`nIntegridade 1 Iniciada......."
+                $log_ = $log_ + "Integridade 1 Iniciada......."
                 Clear-Host
                 write-host "`n`n`n - - - - Verificação de integridade do windows - - - -`n`n"
                 write-host " Iniciando Reparação de integridade da ISO do Windows (Passo 1)"
@@ -322,7 +322,7 @@ function Win {
             #Integridade2
             { $PSItem -in $integridade2 } {
                 $temp_date = Get-Date
-                $log_ = $log_ + "`nIntegridade 2 Iniciada......."
+                $log_ = $log_ + "Integridade 2 Iniciada......."
                 Clear-Host
                 write-host "`n`n`n Iniciando Verificação de Integridade dos Arquivos do Sistema (Passo 2)"
                 write-host " processando..."
@@ -337,7 +337,7 @@ function Win {
                 if ($Verification -ne -1) {
                     $temp_date = Get-Date
                     Clear-Host
-                    $log_ = $log_ + "`nSelecionando versão mais recente do windows defender......."
+                    $log_ = $log_ + "Selecionando versão mais recente do windows defender......."
                     $CurrentPath = Get-Location
                     Set-Location "C:\Program Files\Windows Defender"
                     Get-ChildItem
@@ -345,11 +345,11 @@ function Win {
                     $log_ = $log_ + "Finalizado - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                     write-host "`nScan Type: "$Verification"`n"
                     $temp_date = Get-Date
-                    $log_ = $log_ + "`nAtualização de assinatura iniciada......."
+                    $log_ = $log_ + "Atualização de assinatura iniciada......."
                     .\mpcmdrun.exe -SignatureUpdate
                     $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                     $temp_date = Get-Date
-                    $log_ = $log_ + "`nVerificação antivirus tipo $Verification iniciada......."
+                    $log_ = $log_ + "Verificação antivirus tipo $Verification iniciada......."
                     .\mpcmdrun.exe -Scan -ScanType $Verification
                     $log_ = $log_ + "Finalizada - (" +[string]((Get-Date) - $temp_date)+ ")`n"
                     Set-Location $CurrentPath
