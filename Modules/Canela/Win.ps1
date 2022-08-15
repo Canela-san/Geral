@@ -253,13 +253,13 @@ function Win {
                 }
             }
         }
-        $data_i = Get-Date
         $log_ = "Processando: $type`nTempo de espera adicional: $t`nTipo de HD: $HD`nVerificação antivírus: $Verification`nReinicialização r, s, a: $r, $s, $a`n"
     }
     
     process {
         if (!$adm){return}
         if ($t) { timeout /t $t /nobreak }
+        if (!$data_i){$data_i = Get-Date}
         # Executaveis 
         Switch ($type) {
 
@@ -401,7 +401,7 @@ function Win {
         "
         $log_ = "O processamento foi finalizado`nLog de execução:`n`nTempo total de execução:`n" + [string]((Get-Date) - $data_i) + "`n`n" + $log_
         $log_
-        if ($log) { $log_ > C:\Users\Canela\Desktop\LOG.txt }
+        if ($log) { $log_ > $HOME\desktop\LOG.txt }
         #Reiniciar
         if (!$adm){return}
         if ($a){return}
