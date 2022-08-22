@@ -1,3 +1,2 @@
-
 echo 'Dando chmod +x para todos os arquivos!'
-chmod +x ./*
+chmod +x ../linux/*
