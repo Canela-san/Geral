@@ -18,15 +18,15 @@ y = []
 for i in type_dice:
     max_quant += i
 print ('How many times do you want the program to test the result? ')
-quant_loop = int(input())    
-for base in range(quant_dice, max_quant):
-    media = 0
-    count = 0
-    with alive_bar(int(quant_loop/10000), force_tty=True) as bar:
+quant_loop = int(input())
+with alive_bar(int(max_quant), force_tty=True) as bar:
+    for base in range(1, max_quant):
+        media = 0
+        count = 0
         for n in range(1, quant_loop):
             sums = 0
             for i in type_dice:
-                sums += random.randint(1, type_dice[i-1])
+                sums += random.randint(1, i)
             if sums >= base:
                 count += 1
             media = 100*count/(n)
@@ -36,16 +36,25 @@ for base in range(quant_dice, max_quant):
                 print ('The chances are:')
                 print (media, '%')
                 print ()
-                bar()
 
-            if n+10 == quant_loop:
+            if n-10 == quant_loop:
                 os.system('clear')
                 print ('The chances are:')
                 print (media, '%')
                 print ()
                 bar()
-    y.append(media)
-    x.append(base)
+        os.system('clear')
+        print ('The chances are:')
+        print (media, '%')
+        print ()        
+        bar()
+        y.append(media)
+        x.append(base)
+    os.system('clear')
+    print ('The chances are:')
+    print (media, '%')
+    print ()
+    bar()
 plt.plot(x,y)
 plt.xlabel('Quantidade mínima')
 plt.ylabel('Probabilidade')
