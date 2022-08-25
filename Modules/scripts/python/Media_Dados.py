@@ -1,7 +1,6 @@
 import os
 import random
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 from alive_progress import alive_bar
 type_dice = []
 quant_dice = int(input('How many dice do you want to throw? '))
@@ -46,7 +45,7 @@ with alive_bar(int(max_quant), force_tty=True) as bar:
         os.system('clear')
         print ('The chances are:')
         print (media, '%')
-        print ()        
+        print ()
         bar()
         y.append(media)
         x.append(base)
