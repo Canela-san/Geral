@@ -1,0 +1,78 @@
+BE310;30;2;Ciências do Ambiente
+CE304;30;2;Direito
+CE738;60;4;Economia para Engenharia
+CE838;30;2;Contabilidade para Engenharia
+EA513;60;4;Circuitos Elétricos
+EA614;60;4;Análise de Sinais
+EA772;60;4;Circuitos Lógicos
+EE533;60;4;Eletrônica Básica I
+EE534;30;2;Laboratório de Eletrônica Aplicada
+EM423;45;3;Resistência dos Materiais
+F 128;60;4;Física Geral I
+F 129;30;2;Física Experimental I
+F 228;60;4;Física Geral II
+F 229;30;2;Física Experimental II
+F 315;60;4;Mecânica Geral I
+F 328;60;4;Física Geral III
+F 329;30;2;Física Experimental III
+F 428;60;4;Física Geral IV
+F 429;30;2;Física Experimental IV
+HZ291;30;2;Tópicos Especiais de Humanidades I
+LA122;90;4;Inglês Instrumental I
+MA111;90;6;Cálculo I
+MA141;60;4;Geometria Analítica e Vetores
+MA211;90;6;Cálculo II
+MA311;90;6;Cálculo III
+MA327;60;4;Álgebra Linear
+MC102;90;6;Algoritmos e Programação de Computadores
+MC202;90;6;Estruturas de Dados
+MC322;60;4;Programação Orientada a Objetos
+MC358;60;4;Fundamentos Matemáticos da Computação
+MC404;60;4;Organização Básica de Computadores e Linguagem de Montagem
+MC458;60;4;Projeto e Análise de Algoritmos I
+ME323;60;4;Introdução aos Modelos Probabilísticos
+MS211;60;4;Cálculo Numérico
+QG111;30;2;Química Teórica
+QG122;30;2;Química Experimental
+CE839;30;2;Introdução à Administração para Computação
+MC030;180;12;Projeto Final de Graduação
+MC426;60;4;Engenharia de Software
+MC504;60;4;Sistemas Operacionais
+MC536;90;6;Bancos de Dados: Teoria e Prática
+MC558;60;4;Projeto e Análise de Algoritmos II
+MC613;60;4;Laboratório de Circuitos Digitais
+MC714;60;4;Sistemas Distribuídos
+MC732;60;4;Projeto de Sistemas Computacionais
+MC750;60;4;Construção de Interfaces Homem-Computador
+MC832;60;4;Redes de Computadores
+MC833;30;2;Programação de Redes de Computadores
+MC921;90;6;Projeto e Construção de Compiladores
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+;;;
+1;t1;tt1;
+2;t2;tt2;
+3;t3;tt3;
+4;t4;tt4;
+5;t5;tt5;
+6;t6;tt6;
