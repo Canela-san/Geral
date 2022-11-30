@@ -1,0 +1,1 @@
+.\cgminer.exe -o stratum+tcp://ltc.viabtc.io:3333 -u Sstarksan.001 -p 123
